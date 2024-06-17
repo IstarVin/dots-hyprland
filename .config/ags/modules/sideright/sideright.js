@@ -26,6 +26,7 @@ import { getDistroIcon } from '../.miscutils/system.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
+import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 
 const centerWidgets = [
     {
@@ -67,13 +68,18 @@ const timeRow = Box({
             hpack: 'center',
             className: 'txt-small txt',
             setup: (self) => self
-                .poll(5000, label => {
+                .poll(60000, label => {
                     execAsync(['bash', '-c', `uptime -p | sed -e 's/...//;s/ day\\| days/d/;s/ hour\\| hours/h/;s/ minute\\| minutes/m/;s/,[^,]*//2'`])
                         .then(upTimeString => {
                             label.label = `Uptime ${upTimeString}`;
                         }).catch(print);
                 })
             ,
+        }),
+        Widget.Label({
+            hpack: 'center',
+            className: 'txt-small txt',
+            label: `(${Utils.exec('cat /tmp/since.txt')})`
         }),
         Widget.Box({ hexpand: true }),
         // ModuleEditIcon({ hpack: 'end' }), // TODO: Make this work
