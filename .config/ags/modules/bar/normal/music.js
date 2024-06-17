@@ -60,17 +60,60 @@ const BarResource = (name, icon, command, circprogClassName = 'bar-batt-circprog
         className: `txt-smallie ${textClassName}`,
     });
     const widget = Button({
-        onClicked: () => Utils.execAsync(['bash', '-c', `${userOptions.apps.taskManager}`]).catch(print),
+        // onClicked: () => Utils.execAsync(['bash', '-c', `${userOptions.apps.taskManager}`]).catch(print),
         child: Box({
-            className: `spacing-h-4 ${textClassName}`,
+            className: `spacing-h-4 pad-x ${textClassName}`,
             children: [
                 resourceProgress,
                 resourceLabel,
             ],
-            setup: (self) => self.poll(5000, () => execAsync(['bash', '-c', command])
+            setup: (self) => self.poll(2500, () => execAsync(['bash', '-c', command])
                 .then((output) => {
                     resourceCircProg.css = `font-size: ${Number(output)}px;`;
                     resourceLabel.label = `${Math.round(Number(output))}%`;
+                    widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
+                }).catch(print))
+            ,
+        })
+    });
+    return widget;
+}
+
+const MyBarResource = (name, icon, command, circprogClassName = 'bar-batt-circprog', textClassName = 'txt-onSurfaceVariant', iconClassName = 'bar-batt') => {
+    const resourceCircProg = AnimatedCircProg({
+        className: `${circprogClassName}`,
+        vpack: 'center',
+        hpack: 'center',
+    });
+    const resourceProgress = Box({
+        homogeneous: true,
+        children: [Overlay({
+            child: Box({
+                vpack: 'center',
+                className: `${iconClassName}`,
+                homogeneous: true,
+                children: [
+                    MaterialIcon(icon, 'small'),
+                ],
+            }),
+            overlays: [resourceCircProg]
+        })]
+    });
+    const resourceLabel = Label({
+        className: `txt-smallie ${textClassName}`,
+    });
+    const widget = Button({
+        // onClicked: () => Utils.execAsync(['bash', '-c', `${userOptions.apps.taskManager}`]).catch(print),
+        child: Box({
+            className: `spacing-h-4 pad-x ${textClassName}`,
+            children: [
+                resourceProgress,
+                resourceLabel,
+            ],
+            setup: (self) => self.poll(2500, () => execAsync(['bash', '-c', command])
+                .then((output) => {
+                    resourceCircProg.css = `font-size: ${Number(output)}px;`;
+                    resourceLabel.label = `${Math.round(Number(output))}°C`;
                     widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
                 }).catch(print))
             ,
@@ -183,26 +226,32 @@ export default () => {
         } else return BarGroup({
             child: Box({
                 children: [
-                    BarResource('RAM Usage', 'memory', `LANG=C free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`,
+                    BarResource('CPU Usage', 'memory', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
+                        'bar-cpu-circprog', 'bar-cpu-txt', 'bar-cpu-icon'),
+                    BarResource('RAM Usage', 'memory_alt', `LANG=C free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`,
                         'bar-ram-circprog', 'bar-ram-txt', 'bar-ram-icon'),
-                    Revealer({
-                        revealChild: true,
-                        transition: 'slide_left',
-                        transitionDuration: userOptions.animations.durationLarge,
-                        child: Box({
-                            className: 'spacing-h-10 margin-left-10',
-                            children: [
-                                BarResource('Swap Usage', 'swap_horiz', `LANG=C free | awk '/^Swap/ {if ($2 > 0) printf("%.2f\\n", ($3/$2) * 100); else print "0";}'`,
-                                    'bar-swap-circprog', 'bar-swap-txt', 'bar-swap-icon'),
-                                BarResource('CPU Usage', 'settings_motion_mode', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
-                                    'bar-cpu-circprog', 'bar-cpu-txt', 'bar-cpu-icon'),
-                            ]
-                        }),
-                        setup: (self) => self.hook(Mpris, label => {
-                            const mpris = Mpris.getPlayer('');
-                            self.revealChild = (!mpris);
-                        }),
-                    })
+                    MyBarResource('Temperature', 'device_thermostat', `echo $(expr $(cat /sys/devices/virtual/thermal/thermal_zone0/temp) / 1000)`,
+                        'bar-ram-circprog', 'bar-ram-txt', 'bar-ram-icon'),
+                    // BarResource('Swap Usage', 'swap_horiz', `LANG=C free | awk '/^Swap/ {if ($2 > 0) printf("%.2f\\n", ($3/$2) * 100); else print "0";}'`,
+                    //     'bar-swap-circprog', 'bar-swap-txt', 'bar-swap-icon'),
+                    // Revealer({
+                    //     revealChild: true,
+                    //     transition: 'slide_left',
+                    //     transitionDuration: userOptions.animations.durationLarge,
+                    //     child: Box({
+                    //         className: 'spacing-h-10 margin-left-10',
+                    //         children: [
+                    //             BarResource('Swap Usage', 'swap_horiz', `LANG=C free | awk '/^Swap/ {if ($2 > 0) printf("%.2f\\n", ($3/$2) * 100); else print "0";}'`,
+                    //                 'bar-swap-circprog', 'bar-swap-txt', 'bar-swap-icon'),
+                    //             BarResource('CPU Usage', 'settings_motion_mode', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
+                    //                 'bar-cpu-circprog', 'bar-cpu-txt', 'bar-cpu-icon'),
+                    //         ]
+                    //     }),
+                    //     setup: (self) => self.hook(Mpris, label => {
+                    //         // const mpris = Mpris.getPlayer('');
+                    //         // self.revealChild = (!mpris);
+                    //     }),
+                    // })
                 ],
             })
         });

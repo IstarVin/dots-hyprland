@@ -84,7 +84,7 @@ export default (monitor = 0) => {
         }),
         labelSetup: (self) => self.hook(Audio, (label) => {
             const newDevice = (Audio.speaker?.name);
-            const updateValue = Math.round(Audio.speaker?.volume * 100);
+            const updateValue = (Audio.speaker?.is_muted) ? 0 : Math.round(Audio.speaker?.volume * 100);
             if (!isNaN(updateValue)) {
                 if (newDevice === volumeIndicator.attribute.device && updateValue != label.label) {
                     Indicator.popup(1);
@@ -94,7 +94,7 @@ export default (monitor = 0) => {
             label.label = `${updateValue}`;
         }),
         progressSetup: (self) => self.hook(Audio, (progress) => {
-            const updateValue = Audio.speaker?.volume;
+            const updateValue =(Audio.speaker?.is_muted) ? 0 : Audio.speaker?.volume;
             if (!isNaN(updateValue)) {
                 if (updateValue > 1) progress.value = 1;
                 else progress.value = updateValue;

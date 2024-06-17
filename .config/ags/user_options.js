@@ -4,6 +4,22 @@
 //   options listed in this file will override the default ones in the above file
 
 const userConfigOptions = {
+    'apps': {
+        'taskManager': 'gnome-system-monitor'
+    },
+    'appearance': {
+        'fakeScreenRounding': 2
+    },
+    'time': {
+        'format': '%I:%M %p'
+    },
+    'search': {
+        'engineBaseUrl': "https://search.brave.com/search?q=",
+        'excludedSites': [],
+    },
+    'weather': {
+        'city': 'General Santos'
+    }
 }
 
 export default userConfigOptions;

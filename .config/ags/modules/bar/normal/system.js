@@ -1,4 +1,4 @@
-// This is for the right pills of the bar.
+// This is for the right pills of the bar. 
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Label, Button, Overlay, Revealer, Scrollable, Stack, EventBox } = Widget;
@@ -91,9 +91,24 @@ const BarBattery = () => Box({
             transitionDuration: userOptions.animations.durationSmall,
             revealChild: false,
             transition: 'slide_right',
+            child: Label({
+                className: 'txt-smallie bar-energy-rate',
+                setup: (self) => self.hook(Battery, label => {
+                    label.label = `${Math.abs(Battery.energy_rate).toFixed(2)}W`
+                })
+            }),
+            setup: (self) => self.hook(Battery, revealer => {
+                self.reveal_child = Battery.energy_rate != 0;
+            }),
+        }),
+        
+        Revealer({
+            transitionDuration: userOptions.animations.durationSmall,
+            revealChild: false,
+            transition: 'slide_right',
             child: MaterialIcon('bolt', 'norm', { tooltipText: "Charging" }),
             setup: (self) => self.hook(Battery, revealer => {
-                self.revealChild = Battery.charging;
+                self.reveal_child = Battery.charging;
             }),
         }),
         Label({
@@ -137,7 +152,7 @@ const BatteryModule = () => Stack({
     children: {
         'laptop': Box({
             className: 'spacing-h-4', children: [
-                BarGroup({ child: Utilities() }),
+                // BarGroup({ child: Utilities() }),
                 BarGroup({ child: BarBattery() }),
             ]
         }),
