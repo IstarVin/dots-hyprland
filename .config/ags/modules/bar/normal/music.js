@@ -114,7 +114,7 @@ const MyBarResource = (name, icon, command, circprogClassName = 'bar-batt-circpr
                 .then((output) => {
                     resourceCircProg.css = `font-size: ${Number(output)}px;`;
                     resourceLabel.label = `${Math.round(Number(output))}°C`;
-                    widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
+                    widget.tooltipText = `${name}: ${Math.round(Number(output))}°C`;
                 }).catch(print))
             ,
         })
