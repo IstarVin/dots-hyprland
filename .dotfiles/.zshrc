@@ -19,6 +19,7 @@ zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
+zinit light MichaelAquilina/zsh-autoswitch-virtualenv
 
 # Add in snippets
 zinit snippet OMZP::git
@@ -80,3 +81,5 @@ eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
 
 source ~/.config/zshrc.d/dots-hyprland.zsh
+
+PATH="/home/aj/.bin:$PATH"

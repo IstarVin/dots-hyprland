@@ -61,12 +61,13 @@ function _secondsToHms(d) {
     d = Number(d);
     var h = Math.floor(d / 3600);
     var m = Math.floor(d % 3600 / 60);
-    // var s = Math.floor(d % 3600 % 60);
+    var s = Math.floor(d % 3600 % 60);
 
     var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
     var mDisplay = m > 0 ? m + (m == 1 ? " minute" : " minutes") : "";
-    // var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-    return hDisplay + mDisplay; 
+    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+
+    return (hDisplay == "" && mDisplay == "") ? sDisplay: hDisplay + mDisplay; 
 }
 
 const timeRow = Box({
@@ -76,47 +77,81 @@ const timeRow = Box({
             icon: getDistroIcon(),
             className: 'txt txt-larger',
         }),
-        // Widget.Label({
-        //     hpack: 'center',
-        //     className: 'txt-small txt',
-        //     setup: (self) => self
-        //         .poll(60000, label => {
-        //             execAsync(['bash', '-c', `uptime -p | sed -e 's/...//;s/ day\\| days/d/;s/ hour\\| hours/h/;s/ minute\\| minutes/m/;s/,[^,]*//2'`])
-        //                 .then(upTimeString => {
-        //                     label.label = `Uptime ${upTimeString}`;
-        //                 }).catch(print);
-        //         })
-        //     ,
-        // }),
-        Widget.Label({
-            hpack: 'center',
-            className: 'txt-small txt',
-            setup: (self) => self
-                .hook(Battery, (self) => {
-                    execAsync(['bash', '-c', 'cat /tmp/since-time.txt'])
-                        .then(sinceTime => {
-                            self.label = `Uptime ${_secondsToHms((Date.now() - sinceTime) / 1000)}`
-                        })
-                        .catch(print)
-                })
-            ,
-        }),
+        
         Widget.Revealer({
-            revealChild: true,
+            transitionDuration: userOptions.animations.durationSmall,
+            transition: 'slide_right',
+            revealChild: false,
             child: Widget.Label({
-                hpack: 'center',
-                className: 'txt-small txt',
-                setup: (self) => self
-                    .hook(Battery, (self) => {
-                        self.label = `(${Number(Utils.exec('cat /tmp/since.txt').replace('%', '')) - Battery.percent}%)`
-                    })
+                    hpack: 'center',
+                    className: 'txt-small txt',
+                    setup: (self) => self
+                        .poll(60000, label => {
+                            execAsync(['bash', '-c', `uptime -p | sed -e 's/...//;s/ day\\| days/d/;s/ hour\\| hours/h/;s/ minute\\| minutes/m/;s/,[^,]*//2'`])
+                                .then(upTimeString => {
+                                    label.label = `Uptime ${upTimeString}`;
+                                }).catch(print);
+                        })
+                    ,
+                }),
+            setup: (self) => self.hook(Battery, (self) => {
+                self.revealChild = Battery.energy_rate === 0
+            })
+        }),
+        
+        Widget.Revealer({
+            transitionDuration: userOptions.animations.durationSmall,
+            transition: 'slide_right',
+            revealChild: true,
+            child: Box({
+                className: "spacing-h-10",
+                children: [
+                    Widget.Label({
+                        hpack: 'center',
+                        className: 'txt-small txt',
+                        setup: (self) => self
+                            .hook(Battery, (self) => {
+                                execAsync(['bash', '-c', 'cat /tmp/since-time.txt'])
+                                    .then(sinceTime => {
+                                        self.label = `Uptime ${_secondsToHms((Date.now() - Number(sinceTime)) / 1000)}`
+                                    })
+                                    .catch(print)
+                            })
+                        ,
+                    }),
+                    Widget.Label({
+                        hpack: 'center',
+                        className: 'txt-small txt',
+                        setup: (self) => self
+                            .hook(Battery, (self) => {
+                                self.label = `(${Number(Utils.exec('cat /tmp/since.txt').replace('%', '')) - Battery.percent}%)`
+                            })
+                    }),
+                ]
             }),
+            
             setup: (self) => self.hook(Battery, (self) => {
                 if (Battery.charging) {
                     Utils.exec(['bash', '-c', "upower -i $(upower -e | grep BAT) | awk '/percentage:/ {print $2}' > /tmp/since.txt"])
                     Utils.exec(['bash', '-c', `echo ${Date.now()} > /tmp/since-time.txt`])
                 }
-                self.revealChild = !Battery.charging
+                self.revealChild = Battery.energy_rate !== 0 && !Battery.charging
+            })
+        }),
+        Widget.Revealer({
+            transitionDuration: userOptions.animations.durationSmall,
+            transition: 'slide_right',
+            revealChild: false,
+            child: Widget.Label({
+                hpack: 'center',
+                className: 'text-small txt',
+                setup: (self) => self
+                    .hook(Battery, (self) => {
+                        self.label = `Time to full: ${_secondsToHms(Battery.time_remaining)}`
+                    })
+            }),
+            setup: (self) => self.hook(Battery, (self) => {
+                self.revealChild = Battery.energy_rate !== 0 && Battery.charging
             })
         }),
         Widget.Box({ hexpand: true }),

@@ -4,6 +4,9 @@
 //   options listed in this file will override the default ones in the above file
 
 const userConfigOptions = {
+    'ai': {
+        'defaultGPTProvider': "oxygen3",
+    },
     'apps': {
         'taskManager': 'gnome-system-monitor'
     },

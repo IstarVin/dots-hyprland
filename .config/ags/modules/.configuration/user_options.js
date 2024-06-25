@@ -87,12 +87,12 @@ let configOptions = {
         'image': {
             'columns': 2,
             'batchCount': 20,
-            'allowNsfw': false,
+            'allowNsfw': true,
         },
         'pages': {
             'order': ["apis", "tools"],
             'apis': {
-                'order': ["gemini", "gpt", "waifu", "booru"],
+                'order': ["gpt", "gemini", "waifu", "booru"],
             }
         },
 

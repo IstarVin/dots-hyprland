@@ -110,7 +110,7 @@ const BarBattery = () => Box({
                     label.tooltipText = `${_secondsToHms(Battery.time_remaining)}`
                 })
             }),
-            setup: (self) => self.hook(Battery, revealer => {
+            setup: (self) => self.hook(Battery, self => {
                 self.reveal_child = Battery.energy_rate != 0;
             }),
         }),
@@ -120,7 +120,7 @@ const BarBattery = () => Box({
             revealChild: false,
             transition: 'slide_right',
             child: MaterialIcon('bolt', 'norm', { tooltipText: "Charging" }),
-            setup: (self) => self.hook(Battery, revealer => {
+            setup: (self) => self.hook(Battery, self => {
                 self.reveal_child = Battery.charging;
             }),
         }),
