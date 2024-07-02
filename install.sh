@@ -285,6 +285,9 @@ done
 cp .dots/.zshrc $HOME
 cp .dots/.nanorc $HOME
 
+# Install ROG deps
+rog_install
+
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
 printf "\n"
