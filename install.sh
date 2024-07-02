@@ -281,7 +281,9 @@ for i in ${warn_files_tests[@]}; do
   test -d $i && warn_files+=($i)
 done
 
-rsync .dots $HOME
+# Copy my dots
+cp .dots/.zshrc $HOME
+cp .dots/.nanorc $HOME
 
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
