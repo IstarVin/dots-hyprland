@@ -184,69 +184,71 @@ v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME
 # (eg. in ~/.config/hypr) won't be mixed together
 
 # MISC (For .config/* but not AGS, not Fish, not Hyprland)
-case $SKIP_MISCCONF in
-  true) sleep 0;;
-  *)
-    for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
-#      i=".config/$i"
-      echo "[$0]: Found target: .config/$i"
-      if [ -d ".config/$i" ];then v rsync -av --delete ".config/$i/" "$XDG_CONFIG_HOME/$i/"
-      elif [ -f ".config/$i" ];then v rsync -av ".config/$i" "$XDG_CONFIG_HOME/$i"
-      fi
-    done
-    ;;
-esac
+# case $SKIP_MISCCONF in
+#   true) sleep 0;;
+#   *)
+#     for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
+# #      i=".config/$i"
+#       echo "[$0]: Found target: .config/$i"
+#       if [ -d ".config/$i" ];then v rsync -av --delete ".config/$i/" "$XDG_CONFIG_HOME/$i/"
+#       elif [ -f ".config/$i" ];then v rsync -av ".config/$i" "$XDG_CONFIG_HOME/$i"
+#       fi
+#     done
+#     ;;
+# esac
 
-case $SKIP_FISH in
-  true) sleep 0;;
-  *)
-    v rsync -av --delete .config/fish/ "$XDG_CONFIG_HOME"/fish/
-    ;;
-esac
+# case $SKIP_FISH in
+#   true) sleep 0;;
+#   *)
+#     v rsync -av --delete .config/fish/ "$XDG_CONFIG_HOME"/fish/
+#     ;;
+# esac
 
-# For AGS
-case $SKIP_AGS in
-  true) sleep 0;;
-  *)
-    v rsync -av --delete --exclude '/user_options.js' .config/ags/ "$XDG_CONFIG_HOME"/ags/
-    t="$XDG_CONFIG_HOME/ags/user_options.js"
-    if [ -f $t ];then
-      echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
-      # v cp -f .config/ags/user_options.js $t.new
-      existed_ags_opt=y
-    else
-      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
-      v cp .config/ags/user_options.js $t
-      existed_ags_opt=n
-    fi
-    ;;
-esac
+# # For AGS
+# case $SKIP_AGS in
+#   true) sleep 0;;
+#   *)
+#     v rsync -av --delete --exclude '/user_options.js' .config/ags/ "$XDG_CONFIG_HOME"/ags/
+#     t="$XDG_CONFIG_HOME/ags/user_options.js"
+#     if [ -f $t ];then
+#       echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+#       # v cp -f .config/ags/user_options.js $t.new
+#       existed_ags_opt=y
+#     else
+#       echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+#       v cp .config/ags/user_options.js $t
+#       existed_ags_opt=n
+#     fi
+#     ;;
+# esac
 
-# For Hyprland
-case $SKIP_HYPRLAND in
-  true) sleep 0;;
-  *)
-    v rsync -av --delete --exclude '/custom' --exclude '/hyprland.conf' .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
-    t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
-    if [ -f $t ];then
-      echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
-      v cp -f .config/hypr/hyprland.conf $t.new
-      existed_hypr_conf=y
-    else
-      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
-      v cp .config/hypr/hyprland.conf $t
-      existed_hypr_conf=n
-    fi
-    t="$XDG_CONFIG_HOME/hypr/custom"
-    if [ -d $t ];then
-      echo -e "\e[34m[$0]: \"$t\" already exists, will not do anything.\e[0m"
-    else
-      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
-      v rsync -av --delete .config/hypr/custom/ $t/
-    fi
-    ;;
-esac
+# # For Hyprland
+# case $SKIP_HYPRLAND in
+#   true) sleep 0;;
+#   *)
+#     v rsync -av --delete --exclude '/custom' --exclude '/hyprland.conf' .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
+#     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
+#     if [ -f $t ];then
+#       echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+#       v cp -f .config/hypr/hyprland.conf $t.new
+#       existed_hypr_conf=y
+#     else
+#       echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+#       v cp .config/hypr/hyprland.conf $t
+#       existed_hypr_conf=n
+#     fi
+#     t="$XDG_CONFIG_HOME/hypr/custom"
+#     if [ -d $t ];then
+#       echo -e "\e[34m[$0]: \"$t\" already exists, will not do anything.\e[0m"
+#     else
+#       echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+#       v rsync -av --delete .config/hypr/custom/ $t/
+#     fi
+#     ;;
+# esac
 
+# use chezmoi to copy dotfiles
+v chezmoi init --apply IstarVin
 
 # some foldes (eg. .local/bin) should be processed separately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
@@ -259,8 +261,8 @@ v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 sleep 1
 try hyprctl reload
 
-existed_zsh_conf=n
-grep -q 'source ${XDG_CONFIG_HOME:-~/.config}/zshrc.d/dots-hyprland.zsh' ~/.zshrc && existed_zsh_conf=y
+# existed_zsh_conf=n
+# grep -q 'source ${XDG_CONFIG_HOME:-~/.config}/zshrc.d/dots-hyprland.zsh' ~/.zshrc && existed_zsh_conf=y
 
 warn_files=()
 warn_files_tests=()
@@ -280,10 +282,6 @@ for i in ${warn_files_tests[@]}; do
   test -f $i && warn_files+=($i)
   test -d $i && warn_files+=($i)
 done
-
-# Copy my dots
-cp .dots/.zshrc $HOME
-cp .dots/.nanorc $HOME
 
 rog_install
 
