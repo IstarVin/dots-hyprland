@@ -92,5 +92,5 @@ Server = https://arch.asus-linux.org
   sudo pacman -Suy --noconfirm asusctl power-profiles-daemon supergfxctl switcheroo-control
   sudo systemctl enable --now power-profiles-daemon supergfxd switcheroo-control
 
-  asusctl -c 60
+  # asusctl -c 60
 }
