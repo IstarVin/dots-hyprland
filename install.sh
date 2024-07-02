@@ -287,6 +287,8 @@ cp .dots/.nanorc $HOME
 
 rog_install
 
+gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal foot
+
 # force use integrated gpu
 ln -sf /dev/dri/by-path/pci-0000:06:00.0-card $HOME/.config/hypr/card
 
