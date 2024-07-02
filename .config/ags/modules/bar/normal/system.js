@@ -84,6 +84,18 @@ const Utilities = () => Box({
     ]
 })
 
+function _secondsToHms(d) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    // var s = Math.floor(d % 3600 % 60);
+
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute" : " minutes") : "";
+    // var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+    return hDisplay + mDisplay; 
+}
+
 const BarBattery = () => Box({
     className: 'spacing-h-4 bar-batt-txt',
     children: [
@@ -91,9 +103,24 @@ const BarBattery = () => Box({
             transitionDuration: userOptions.animations.durationSmall,
             revealChild: false,
             transition: 'slide_right',
+            child: Label({
+                className: 'txt-smallie bar-energy-rate',
+                setup: (self) => self.hook(Battery, label => {
+                    label.label = `${Math.abs(Battery.energy_rate).toFixed(2)}W`
+                    label.tooltipText = `${_secondsToHms(Battery.time_remaining)}`
+                })
+            }),
+            setup: (self) => self.hook(Battery, self => {
+                self.reveal_child = Battery.energy_rate != 0;
+            }),
+        }),
+        Revealer({
+            transitionDuration: userOptions.animations.durationSmall,
+            revealChild: false,
+            transition: 'slide_right',
             child: MaterialIcon('bolt', 'norm', { tooltipText: "Charging" }),
             setup: (self) => self.hook(Battery, revealer => {
-                self.revealChild = Battery.charging;
+                self.reveal_child = Battery.charging;
             }),
         }),
         Label({
@@ -122,6 +149,77 @@ const BarBattery = () => Box({
     ]
 });
 
+let size = function (bits) {
+    
+    if (bits.includes('K')) {
+        ''.replace
+        bits = parseInt(bits.replace('K', '')) * 1000
+    } else {
+        bits = parseInt(bits)
+    }
+    let bytes = bits
+    if (bytes === 0) {
+        return "0.00 B";
+    }
+     
+    let e = Math.floor(Math.log(bytes) / Math.log(1024));
+    return (bytes / Math.pow(1024, e)).toFixed(2) +
+        ' ' + ' KMGTP'.charAt(e) + 'B';
+}
+
+const BarNetwork = () => Widget.CenterBox({
+    className: 'spacing-h-4 pad-x bar-network bar-batt-txt',
+    centerWidget: 
+        Box({
+            children: [
+                Label({
+                    className: 'icon-material',
+                    label: 'download_2'
+                }),
+                Label({
+                    className: 'txt-smallie',
+                    label: '0.00 B',
+                    setup: (self) => self.poll(1000, () => execAsync(['bash', '-c', "ifstat -s $(ip route | awk '/default/ && NR==1 {print $5}') | grep $(ip route | awk '/default/ && NR==1 {print $5}') | awk '{print $6}'"])
+                        .then((output) => {
+                            if (output == '') {
+                                output = '0'
+                            }
+                            self.label = size(output) + '  '
+
+                            Utils.execAsync(['bash', '-c', `cat /proc/net/dev | grep "$(ip route | awk '/default/ && NR==1 {print $5}')" | awk '{print $2}'`])
+                                .then(totalReceived => self.tooltipText = size(totalReceived))
+                                .catch(print)
+                        }).catch(print)
+                    )
+                }),
+                Label({
+                    className: 'icon-material',
+                    label: 'upload_2'
+                }),
+                Label({
+                    className: 'txt-smallie',
+                    label: '0.00 B',
+                    setup: (self) => self.poll(1000, () => execAsync(['bash', '-c', "ifstat $(ip route | awk '/default/ && NR==1 {print $5}') | grep $(ip route | awk '/default/ && NR==1 {print $5}') | awk '{print $8}'"])
+                        .then((output) => {
+                            if (output == '') {
+                                output = '0'
+                            }
+                            self.label = size(output)
+
+                            Utils.execAsync(['bash', '-c', `cat /proc/net/dev | grep "$(ip route | awk '/default/ && NR==1 {print $5}')" | awk '{print $10}'`])
+                                .then(totalSent => self.tooltipText = size(totalSent))
+                                .catch(print)
+                            
+                        }).catch(print)
+                    )
+                })
+            ]
+        })
+        
+    
+})
+
+
 const BarGroup = ({ child }) => Widget.Box({
     className: 'bar-group-margin bar-sides',
     children: [
@@ -139,6 +237,7 @@ const BatteryModule = () => Stack({
             className: 'spacing-h-4', children: [
                 BarGroup({ child: Utilities() }),
                 BarGroup({ child: BarBattery() }),
+                BarGroup({ child: BarNetwork() })
             ]
         }),
         'desktop': BarGroup({

@@ -4,6 +4,29 @@
 //   options listed in this file will override the default ones in the above file
 
 const userConfigOptions = {
+    'ai': {
+        'defaultGPTProvider': "oxygen3",
+    },
+    'apps': {
+        'taskManager': 'gnome-system-monitor'
+    },
+    'appearance': {
+        'fakeScreenRounding': 2
+    },
+    'time': {
+        'format': '%I:%M %p'
+    },
+    'search': {
+        'engineBaseUrl': "https://search.brave.com/search?q=",
+        'excludedSites': [],
+    },
+    'sidebar': {
+        'pages': {
+            'apis': {
+                'order': ['gpt', 'gemini', 'waifu', 'booru']
+            }
+        }
+    }
 }
 
 export default userConfigOptions;
