@@ -42,6 +42,7 @@ zinit cdreplay -q
 #bindkey -e
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
+bindkey '^o' autosuggest-accept
 #bindkey '^[w' kill-region
 
 # History
@@ -65,21 +66,28 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # Aliases
-alias ls='exa'
+alias ls='lsd'
 alias vim='nvim'
 alias c='clear'
-alias ll='exa -lh'
-alias la='exa -lah'
-alias tree='exa --tree'
-alias S='yay -S'
+alias ll='lsd -lh'
+alias la='lsd -lah'
+alias tree='lsd --tree'
+alias S='yay -Sy'
 alias Ss='yay -Ss'
 alias gedit='gnome-text-editor'
+alias nano='nvim'
+alias cat='bat'
+alias py='python3'
 
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
 
+if [[ $TERM != "tmux-"* ]]; then
 source ~/.config/zshrc.d/dots-hyprland.zsh
+fi
+
+source ~/.config/zshrc.d/auto-Hypr.sh
 
 PATH="/home/aj/.bin:$PATH"

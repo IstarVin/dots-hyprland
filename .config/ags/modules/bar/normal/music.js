@@ -84,15 +84,25 @@ const TrackProgress = () => {
     const mpris = Mpris.getPlayer('');
     if (!mpris) return;
     // Set circular progress value
+    // execAsync(`notify-send ${mpris.signal}`)
+    // if (mpris.length != 0 && Math.ceil(mpris.length) - Math.ceil(mpris.position) < 3) {
+    // mpris.position - mpris.length
+    // execAsync(`notify-send "${mpris.position} / ${mpris.length}"`)
+    // }
+    // if (mpris.position == mpris.length - 1) {
+    //   execAsync("sleep 1 && playerctl next")
+    // }
     circprog.css = `font-size: ${Math.max(mpris.position / mpris.length * 100, 0)}px;`
   }
   return AnimatedCircProg({
     className: 'bar-music-circprog',
     vpack: 'center', hpack: 'center',
-    extraSetup: (self) => self
-      .hook(Mpris, _updateProgress)
-      .poll(3000, _updateProgress)
-    ,
+    // css: 'font-size: 100px'
+    extraSetup: (self) => self.css = 'font-size: 100px'
+    // extraSetup: (self) => self
+    //   .hook(Mpris, _updateProgress)
+    //   .poll(3000, _updateProgress)
+    // ,
   })
 }
 
@@ -135,18 +145,22 @@ export default () => {
       ]
     })]
   });
-  const trackTitle = Label({
-    hexpand: true,
-    className: 'txt-smallie bar-music-txt',
-    truncate: 'end',
-    maxWidthChars: 1, // Doesn't matter, just needs to be non negative
-    setup: (self) => self.hook(Mpris, label => {
-      const mpris = Mpris.getPlayer('');
-      if (mpris)
-        label.label = `${trimTrackTitle(mpris.trackTitle)} • ${mpris.trackArtists.join(', ')}`;
-      else
-        label.label = 'No media';
-    }),
+  const trackTitle = Button({
+    child:
+      Label({
+        hexpand: true,
+        className: 'txt-smallie bar-music-txt',
+        truncate: 'end',
+        maxWidthChars: 1, // Doesn't matter, just needs to be non negative
+        setup: (self) => self.hook(Mpris, label => {
+          const mpris = Mpris.getPlayer('');
+          if (mpris)
+            label.label = `${trimTrackTitle(mpris.trackTitle)} • ${mpris.trackArtists.join(', ')}`;
+          else
+            label.label = 'No media';
+        }),
+      }),
+    onPrimaryClickRelease: () => execAsync("hyprctl dispatch togglespecialworkspace music").catch(print)
   })
   const musicStuff = Box({
     className: 'spacing-h-10',
