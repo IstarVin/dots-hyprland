@@ -29,19 +29,19 @@ const SeparatorDot = () => Widget.Revealer({
   ,
 });
 
-const NumUpdatePackageIndicator = Widget.Label({
-  className: 'txt-small txt',
-  setup: (self) => self.poll(43200000, label => {
-    execAsync(['bash', '-c', 'checkupdates | wc -l']).then(out => {
-      if (Number(out) == 0) {
-        label.label = ``
-        label.tooltipText = 'All package are up to date'
-      } else {
-        label.label = `󰮯  ${out}`
-      }
-    })
-  })
-})
+// const NumUpdatePackageIndicator = Widget.Label({
+//   className: 'txt-small txt',
+//   setup: (self) => self.poll(43200000, label => {
+//     execAsync(['bash', '-c', 'checkupdates | wc -l']).then(out => {
+//       if (Number(out) == 0) {
+//         label.label = ``
+//         label.tooltipText = 'All package are up to date'
+//       } else {
+//         label.label = `󰮯  ${out}`
+//       }
+//     })
+//   })
+// })
 
 export default () => {
   const barTray = Tray();
@@ -76,7 +76,7 @@ export default () => {
     hexpand: true,
     className: 'spacing-h-5 bar-spaceright',
     children: [
-      NumUpdatePackageIndicator,
+      // NumUpdatePackageIndicator,
       emptyArea,
       barTray,
       indicatorArea
