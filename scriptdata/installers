@@ -167,6 +167,8 @@ function sddm_theme_install() {
   sddmtheme=Candy
   sudo tar -xzf Extras/sddm/Sddm_${sddmtheme}.tar.gz -C /usr/share/sddm/themes/
   sudo cp /usr/share/sddm/themes/${sddmtheme}/kde_settings.conf /etc/sddm.conf.d/
+
+  sudo systemctl enable sddm
 }
 
 function evremap_install() {

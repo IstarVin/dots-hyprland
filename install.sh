@@ -295,6 +295,8 @@ v aj_disk
 if hostnamectl status | grep ROG >/dev/null 2>&1; then
   v rog_install
   v evremap_install
+  ln -sf /dev/dri/by-path/pci-0000:06:00.0-card $HOME/.config/hypr/card
+
 fi
 v sddm_theme_install
 
@@ -308,7 +310,6 @@ bash link_configs.sh
 gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal foot
 
 # force use integrated gpu
-ln -sf /dev/dri/by-path/pci-0000:06:00.0-card $HOME/.config/hypr/card
 
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
