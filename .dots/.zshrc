@@ -78,6 +78,7 @@ alias gedit='gnome-text-editor'
 alias nano='nvim'
 alias cat='bat'
 alias py='python3'
+alias pn='cat /sys/class/power_supply/BAT0/power_now'
 
 # Shell integrations
 eval "$(fzf --zsh)"

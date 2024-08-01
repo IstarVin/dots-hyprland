@@ -23,7 +23,7 @@ install-yay() {
 }
 
 # Not for Arch(based) distro.
-install-ags (){
+install-ags() {
   x mkdir -p $base/cache/ags
   x cd $base/cache/ags
   try git init -b main
@@ -37,43 +37,43 @@ install-ags (){
 }
 
 # Not for Arch(based) distro.
-install-Rubik (){
+install-Rubik() {
   x mkdir -p $base/cache/Rubik
   x cd $base/cache/Rubik
   try git init -b main
   try git remote add origin https://github.com/googlefonts/rubik.git
   x git pull origin main && git submodule update --init --recursive
-	x sudo mkdir -p /usr/local/share/fonts/TTF/
-	x sudo cp fonts/variable/Rubik*.ttf /usr/local/share/fonts/TTF/
-	x sudo mkdir -p /usr/local/share/licenses/ttf-rubik/
-	x sudo cp OFL.txt /usr/local/share/licenses/ttf-rubik/LICENSE
+  x sudo mkdir -p /usr/local/share/fonts/TTF/
+  x sudo cp fonts/variable/Rubik*.ttf /usr/local/share/fonts/TTF/
+  x sudo mkdir -p /usr/local/share/licenses/ttf-rubik/
+  x sudo cp OFL.txt /usr/local/share/licenses/ttf-rubik/LICENSE
   x fc-cache -fv
   x gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
   x cd $base
 }
 
 # Not for Arch(based) distro.
-install-Gabarito (){
+install-Gabarito() {
   x mkdir -p $base/cache/Gabarito
   x cd $base/cache/Gabarito
   try git init -b main
   try git remote add origin https://github.com/naipefoundry/gabarito.git
   x git pull origin main && git submodule update --init --recursive
-	x sudo mkdir -p /usr/local/share/fonts/TTF/
-	x sudo cp fonts/ttf/Gabarito*.ttf /usr/local/share/fonts/TTF/
-	x sudo mkdir -p /usr/local/share/licenses/ttf-gabarito/
-	x sudo cp OFL.txt /usr/local/share/licenses/ttf-gabarito/LICENSE
+  x sudo mkdir -p /usr/local/share/fonts/TTF/
+  x sudo cp fonts/ttf/Gabarito*.ttf /usr/local/share/fonts/TTF/
+  x sudo mkdir -p /usr/local/share/licenses/ttf-gabarito/
+  x sudo cp OFL.txt /usr/local/share/licenses/ttf-gabarito/LICENSE
   x fc-cache -fv
   x cd $base
 }
 
 # Not for Arch(based) distro.
-install-OneUI (){
+install-OneUI() {
   x mkdir -p $base/cache/OneUI4-Icons
   x cd $base/cache/OneUI4-Icons
   try git init -b main
   try git remote add origin https://github.com/end-4/OneUI4-Icons.git
-# try git remote add origin https://github.com/mjkim0727/OneUI4-Icons.git
+  # try git remote add origin https://github.com/mjkim0727/OneUI4-Icons.git
   x git pull origin main && git submodule update --init --recursive
   x sudo mkdir -p /usr/local/share/icons
   x sudo cp -r OneUI /usr/local/share/icons
@@ -83,7 +83,7 @@ install-OneUI (){
 }
 
 # Not for Arch(based) distro.
-install-bibata (){
+install-bibata() {
   x mkdir -p $base/cache/bibata-cursor
   x cd $base/cache/bibata-cursor
   name="Bibata-Modern-Classic"
@@ -97,7 +97,7 @@ install-bibata (){
 }
 
 # Not for Arch(based) distro.
-install-MicroTeX (){
+install-MicroTeX() {
   x mkdir -p $base/cache/MicroTeX
   x cd $base/cache/MicroTeX
   try git init -b master
@@ -107,8 +107,72 @@ install-MicroTeX (){
   x cd build
   x cmake ..
   x make -j32
-	x sudo mkdir -p /opt/MicroTeX
+  x sudo mkdir -p /opt/MicroTeX
   x sudo cp ./LaTeX /opt/MicroTeX/
   x sudo cp -r ./res /opt/MicroTeX/
   x cd $base
+}
+
+# Setup extra disk
+function aj_disk() {
+  uuid=f90b3e90-45ae-40a7-a3e2-f35af15e5195
+  if sudo blkid | grep $uuid >/dev/null 2>&1; then
+    sudo mkdir /mnt/AJ/
+    user=$(whoami)
+    sudo chown $user:$user /mnt/AJ/
+    echo -ne "
+
+# AJ
+UUID=$uuid /mnt/AJ btrfs defaults 0 2
+" | sudo tee -a /etc/fstab
+
+    sudo mount -a
+    sudo systemctl daemon-reload
+
+    ln -s /mnt/AJ $HOME/AJ
+    ln -s /mnt/AJ/{Documents,Downloads,Pictures,Projects,Videos} $HOME
+
+    cp -r /mnt/AJ/.ssh/ $HOME
+  fi
+}
+
+# ROG install
+function rog_install() {
+  sudo pacman-key --recv-keys 8F654886F17D497FEFE3DB448B15A6B0E9A3FA35
+  sudo pacman-key --finger 8F654886F17D497FEFE3DB448B15A6B0E9A3FA35
+  sudo pacman-key --lsign-key 8F654886F17D497FEFE3DB448B15A6B0E9A3FA35
+  sudo pacman-key --finger 8F654886F17D497FEFE3DB448B15A6B0E9A3FA35
+
+  wget "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x8b15a6b0e9a3fa35" -O /tmp/g14.sec
+  sudo pacman-key -a /tmp/g14.sec
+  rm /tmp/g14.sec
+
+  echo -ne "
+[g14]
+Server = https://arch.asus-linux.org
+" | sudo tee -a /etc/pacman.conf
+
+  sudo pacman -Suy --noconfirm asusctl power-profiles-daemon supergfxctl switcheroo-control
+  sudo systemctl enable --now power-profiles-daemon supergfxd switcheroo-control
+
+  asusctl -c 60
+}
+
+function sddm_theme_install() {
+  if [ ! -d /etc/sddm.conf.d ]; then
+    sudo mkdir -p /etc/sddm.conf.d
+  fi
+  sddmtheme=Candy
+  sudo tar -xzf Extras/sddm/Sddm_${sddmtheme}.tar.gz -C /usr/share/sddm/themes/
+  sudo cp /usr/share/sddm/themes/${sddmtheme}/kde_settings.conf /etc/sddm.conf.d/
+}
+
+function evremap_install() {
+  sudo cp Extras/evremap/evremap.toml /etc
+  sudo cp Extras/evremap/evremap.service /etc/systemd/user
+  sudo systemctl enable --now evremap
+}
+
+function setup_qemu() {
+  sudo mkdir -p /etc/libvirt/hooks/qemu.d && sudo wget 'https://asus-linux.org/files/vfio/libvirt_hooks/qemu' -O /etc/libvirt/hooks/qemu && sudo chmod +x /etc/libvirt/hooks/qemu
 }

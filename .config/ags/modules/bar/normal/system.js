@@ -238,7 +238,7 @@ const BatteryModule = () => Stack({
   children: {
     'laptop': Box({
       className: 'spacing-h-4', children: [
-        BarGroup({ child: Utilities() }),
+        // BarGroup({ child: Utilities() }),
         BarGroup({ child: BarBattery() }),
         BarGroup({ child: BarNetwork() })
       ]
