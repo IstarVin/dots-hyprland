@@ -159,6 +159,8 @@ Server = https://arch.asus-linux.org
 }
 
 function sddm_theme_install() {
+  yay -S --noconfirm sddm qt5-graphicaleffects qt5-quickcontrols qt5-quickcontrols2
+
   if [ ! -d /etc/sddm.conf.d ]; then
     sudo mkdir -p /etc/sddm.conf.d
   fi
@@ -168,11 +170,13 @@ function sddm_theme_install() {
 }
 
 function evremap_install() {
+  yay -S --noconfirm evremap
   sudo cp Extras/evremap/evremap.toml /etc
   sudo cp Extras/evremap/evremap.service /etc/systemd/user
   sudo systemctl enable --now evremap
 }
 
 function setup_qemu() {
+  yay -S --noconfirm qemu-desktop libvirt edk2-ovmf virt-manager ebtables dnsmasq
   sudo mkdir -p /etc/libvirt/hooks/qemu.d && sudo wget 'https://asus-linux.org/files/vfio/libvirt_hooks/qemu' -O /etc/libvirt/hooks/qemu && sudo chmod +x /etc/libvirt/hooks/qemu
 }
