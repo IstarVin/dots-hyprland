@@ -79,6 +79,7 @@ alias nano='nvim'
 alias cat='bat'
 alias py='python3'
 alias pn='cat /sys/class/power_supply/BAT0/power_now'
+alias sw='cat /tmp/specialworkspace'
 
 # Shell integrations
 eval "$(fzf --zsh)"

@@ -305,8 +305,6 @@ v sudo systemctl enable --now tailscaled
 
 v git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 
-bash link_configs.sh
-
 gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal foot
 
 # force use integrated gpu

@@ -133,6 +133,7 @@ UUID=$uuid /mnt/AJ btrfs defaults 0 2
     ln -s /mnt/AJ/{Documents,Downloads,Pictures,Projects,Videos} $HOME
 
     cp -r /mnt/AJ/.ssh/ $HOME
+    bash link_configs.sh
   fi
 }
 
@@ -176,6 +177,19 @@ function evremap_install() {
   sudo cp Extras/evremap/evremap.toml /etc
   sudo cp Extras/evremap/evremap.service /etc/systemd/user
   sudo systemctl enable --now evremap
+}
+
+function plymouth_install() {
+  yay -S --noconfirm plymouth plymouth-theme-colorful-loop-git
+  sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash /' /etc/default/grub
+  if command -v cryptsetup &>/dev/null; then
+    sed -i 's/HOOKS=(base udev*/& plymouth/' /etc/mkinitcpio.conf             # add plymouth after base udev
+    sed -i 's/HOOKS=(base udev \(.*block\) /&plymouth-/' /etc/mkinitcpio.conf # create plymouth-encrypt after block hook
+  else
+    sed -i 's/HOOKS=(base udev*/& plymouth/' /etc/mkinitcpio.conf # add plymouth after base udev
+  fi
+
+  sudo plymouth-set-default-theme -R colorful-loop
 }
 
 function setup_qemu() {
