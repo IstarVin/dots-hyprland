@@ -105,13 +105,17 @@ const BarBattery = () => Box({
       transition: 'slide_right',
       child: Label({
         className: 'txt-smallie bar-energy-rate',
-        setup: (self) => self.poll(5000, label => {
-          execAsync(['bash', '-c', "cat /sys/class/power_supply/BAT0/uevent | grep POWER_SUPPLY_POWER_NOW | awk -F= '{print $2}'"])
-            .then(out => {
-              label.label = `${(Number(out) / 1000000).toFixed(2)}W`
-              label.tooltipText = `${_secondsToHms(Battery.time_remaining)}`
-            })
+        setup: (self) => self.hook(Battery, self => {
+          self.label = `${Battery.energy_rate.toFixed(2)}W`
+          self.tooltipText = `${_secondsToHms(Battery.time_remaining)}`
         })
+        // setup: (self) => self.poll(5000, label => {
+        //   execAsync(['bash', '-c', "cat /sys/class/power_supply/BAT0/uevent | grep POWER_SUPPLY_POWER_NOW | awk -F= '{print $2}'"])
+        //     .then(out => {
+        //       label.label = `${(Number(out) / 1000000).toFixed(2)}W`
+        //       label.tooltipText = `${_secondsToHms(Battery.time_remaining)}`
+        //     })
+        // })
       }),
       setup: (self) => self.hook(Battery, self => {
         self.reveal_child = Battery.energy_rate != 0;

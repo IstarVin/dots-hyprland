@@ -133,7 +133,10 @@ UUID=$uuid /mnt/AJ btrfs defaults 0 2
     ln -s /mnt/AJ/{Documents,Downloads,Pictures,Projects,Videos} $HOME
 
     cp -r /mnt/AJ/.ssh/ $HOME
+    cwd=$(pwd)
+    cd /mnt/AJ/Projects/dots-hyprland
     bash link_configs.sh
+    cd $cwd
   fi
 }
 
@@ -157,6 +160,8 @@ Server = https://arch.asus-linux.org
   sudo systemctl enable --now power-profiles-daemon supergfxd switcheroo-control
 
   asusctl -c 60
+  asusctl led-mode static -c 614F9A
+  echo "Skip if fail"
 }
 
 function sddm_theme_install() {
@@ -167,27 +172,26 @@ function sddm_theme_install() {
   fi
   sddmtheme=Candy
   sudo tar -xzf Extras/sddm/Sddm_${sddmtheme}.tar.gz -C /usr/share/sddm/themes/
-  sudo cp /usr/share/sddm/themes/${sddmtheme}/kde_settings.conf /etc/sddm.conf.d/
+  sudo cp -f /usr/share/sddm/themes/${sddmtheme}/kde_settings.conf /etc/sddm.conf.d/
 
   sudo systemctl enable sddm
 }
 
 function evremap_install() {
   yay -S --noconfirm evremap
-  sudo cp Extras/evremap/evremap.toml /etc
-  sudo cp Extras/evremap/evremap.service /etc/systemd/user
+  sudo cp -f Extras/evremap/evremap.toml /etc
+  sudo cp -f Extras/evremap/evremap.service /etc/systemd/user
   sudo systemctl enable --now evremap
 }
 
 function plymouth_install() {
   yay -S --noconfirm plymouth plymouth-theme-colorful-loop-git
-  sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash /' /etc/default/grub
-  if command -v cryptsetup &>/dev/null; then
-    sed -i 's/HOOKS=(base udev*/& plymouth/' /etc/mkinitcpio.conf             # add plymouth after base udev
-    sed -i 's/HOOKS=(base udev \(.*block\) /&plymouth-/' /etc/mkinitcpio.conf # create plymouth-encrypt after block hook
-  else
-    sed -i 's/HOOKS=(base udev*/& plymouth/' /etc/mkinitcpio.conf # add plymouth after base udev
-  fi
+  sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash/' /etc/default/grub
+  sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/' /etc/default/grub
+
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+  sudo sed -i 's/HOOKS=(base udev*/& plymouth/' /etc/mkinitcpio.conf # add plymouth after base udev
 
   sudo plymouth-set-default-theme -R colorful-loop
 }
@@ -214,8 +218,9 @@ function nvidia_install() {
 
 function makepkg_patch() {
   TOTAL_MEM=$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')
+  nc=$(nproc --all)
   if [[ $TOTAL_MEM -gt 8000000 ]]; then
-    sed -i "s/#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$nc\"/g" /etc/makepkg.conf
-    sed -i "s/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T $nc -z -)/g" /etc/makepkg.conf
+    sudo sed -i "s/#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$nc\"/g" /etc/makepkg.conf
+    sudo sed -i "s/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T $nc -z -)/g" /etc/makepkg.conf
   fi
 }

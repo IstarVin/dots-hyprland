@@ -65,7 +65,10 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
-# Aliases
+# Functions
+
+
+# aliases
 alias ls='lsd'
 alias vim='nvim'
 alias c='clear'
@@ -78,7 +81,7 @@ alias gedit='gnome-text-editor'
 alias nano='nvim'
 alias cat='bat'
 alias py='python3'
-alias pn='cat /sys/class/power_supply/BAT0/power_now'
+# alias pn='cat /sys/class/power_supply/BAT0/power_now'
 alias sw='cat /tmp/specialworkspace'
 
 # Shell integrations

@@ -299,7 +299,7 @@ if hostnamectl status | grep ROG >/dev/null 2>&1; then
   v evremap_install
   ln -sf /dev/dri/by-path/pci-0000:06:00.0-card $HOME/.config/hypr/card
 else
-  sed -i '%env = WLR_DRM_DEVICES,$HOME/.config/hypr/card%d' $HOME/.config/hypr/custom/env.conf
+  sed -i '/env = WLR_DRM_DEVICES,$HOME\/.config\/hypr\/card/d' $HOME/.config/hypr/custom/env.conf
 fi
 v sddm_theme_install
 v plymouth_install
@@ -312,7 +312,7 @@ v git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 
 gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal foot
 
-# force use integrated gpu
+sudo ufw enable
 
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
