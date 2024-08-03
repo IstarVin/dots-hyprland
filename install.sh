@@ -6,6 +6,8 @@ source ./scriptdata/functions
 source ./scriptdata/installers
 source ./scriptdata/options
 
+v makepkg_patch
+
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1; then
   printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n"
@@ -296,9 +298,12 @@ if hostnamectl status | grep ROG >/dev/null 2>&1; then
   v rog_install
   v evremap_install
   ln -sf /dev/dri/by-path/pci-0000:06:00.0-card $HOME/.config/hypr/card
-
+else
+  sed -i '%env = WLR_DRM_DEVICES,$HOME/.config/hypr/card%d' $HOME/.config/hypr/custom/env.conf
 fi
 v sddm_theme_install
+v plymouth_install
+v nvidia_install
 
 v sudo systemctl enable --now bluetooth
 v sudo systemctl enable --now tailscaled

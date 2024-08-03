@@ -196,3 +196,26 @@ function setup_qemu() {
   yay -S --noconfirm qemu-desktop libvirt edk2-ovmf virt-manager ebtables dnsmasq
   sudo mkdir -p /etc/libvirt/hooks/qemu.d && sudo wget 'https://asus-linux.org/files/vfio/libvirt_hooks/qemu' -O /etc/libvirt/hooks/qemu && sudo chmod +x /etc/libvirt/hooks/qemu
 }
+
+function nvidia_install() {
+  gpu_type=$(lspci)
+  if grep -E "NVIDIA|GeForce" <<<${gpu_type}; then
+    kernel_type=$(uname -r | cut -d "-" -f 4)
+    if [ -z $kernel_type ]; then
+      yay -S linux-headers
+    else
+      yay -S linux-$kernel_type-headers
+    fi
+    yay -S nvidia-dkms
+  else
+    echo "No NVIDIA found skipping..."
+  fi
+}
+
+function makepkg_patch() {
+  TOTAL_MEM=$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')
+  if [[ $TOTAL_MEM -gt 8000000 ]]; then
+    sed -i "s/#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$nc\"/g" /etc/makepkg.conf
+    sed -i "s/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T $nc -z -)/g" /etc/makepkg.conf
+  fi
+}
