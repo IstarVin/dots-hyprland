@@ -73,7 +73,7 @@ function _secondsToHms(d) {
     var mDisplay = m > 0 ? m + (m == 1 ? " minute " : " minutes ") : "";
     var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
 
-    return (hDisplay == "" && mDisplay == "") ? sDisplay: hDisplay + mDisplay; 
+    return (hDisplay == "" && mDisplay == "") ? sDisplay : hDisplay + mDisplay;
 }
 
 const timeRow = Box({
@@ -99,14 +99,14 @@ const timeRow = Box({
                             return execAsync(['bash', '-c', 'uptime']).then(output => {
                                 const uptimeRegex = /up\s+((\d+)\s+days?,\s+)?((\d+):(\d+)),/;
                                 const matches = uptimeRegex.exec(output);
-    
+
                                 if (matches) {
                                     const days = matches[2] ? parseInt(matches[2]) : 0;
                                     const hours = matches[4] ? parseInt(matches[4]) : 0;
                                     const minutes = matches[5] ? parseInt(matches[5]) : 0;
-    
+
                                     let formattedUptime = '';
-    
+
                                     if (days > 0) {
                                         formattedUptime += `${days} d `;
                                     }
@@ -114,7 +114,7 @@ const timeRow = Box({
                                         formattedUptime += `${hours} h `;
                                     }
                                     formattedUptime += `${minutes} m`;
-    
+
                                     return formattedUptime;
                                 } else {
                                     throw new Error('Failed to parse uptime output');
@@ -122,7 +122,7 @@ const timeRow = Box({
                             });
                         }
                     };
-    
+
                     self.poll(5000, label => {
                         getUptime().then(upTimeString => {
                             label.label = `Uptime: ${upTimeString}`;
@@ -169,7 +169,7 @@ const timeRow = Box({
             }),
 
             setup: (self) => self.hook(Battery, (self) => {
-                if (Battery.charging) {
+                if (Battery.charging || Battery.energy_rate == 0) {
                     Utils.exec(['bash', '-c', "upower -i $(upower -e | grep BAT) | awk '/percentage:/ {print $2}' > /tmp/since.txt"])
                     Utils.exec(['bash', '-c', `echo ${Date.now()} > /tmp/since-time.txt`])
                 }
@@ -211,7 +211,7 @@ const togglesBox = Widget.Box({
         // await HyprToggleIcon('touchpad_mouse', 'No touchpad while typing', 'input:touchpad:disable_while_typing', {}),
         await ModuleNightLight(),
         await ModuleInvertColors(),
-        ModuleIdleInhibitor(),
+        ModuleIdleInhibitor,
         await ModuleCloudflareWarp(),
     ]
 })

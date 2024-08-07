@@ -225,6 +225,16 @@ export default () => {
                         revealer.reveal_child = false
                     }
                 })
+                .hook(showSystemMonitor, revealer => {
+                    if (showSystemMonitor.value == true) {
+                        revealer.reveal_child = true
+                    }
+                    else {
+                        if (!(battery.charging || battery.energy_rate == 0)) {
+                            revealer.reveal_child = false
+                        }
+                    }
+                })
 
             // BarResource('CPU Usage', 'memory', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
             //   'bar-cpu-circprog', 'bar-cpu-txt', 'bar-cpu-icon'),

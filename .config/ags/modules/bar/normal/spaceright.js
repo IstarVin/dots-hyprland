@@ -9,6 +9,8 @@ import Indicator from '../../../services/indicator.js';
 import { StatusIcons } from '../../.commonwidgets/statusicons.js';
 import { Tray } from "./tray.js";
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
+import { coffeeStatus } from '../../../variables.js';
+import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 
 const powerProfiles = await Service.import('powerprofiles')
 
@@ -79,6 +81,16 @@ const ActiveProfile = Widget.Button({
     setup: setupCursorHover
 })
 
+const CoffeMode = Widget.Revealer({
+    child: Widget.Button({
+        child: Widget.Label({
+            className: "icon-material txt-large",
+            label: "coffee"
+        })
+    }),
+    revealChild: coffeeStatus.bind()
+})
+
 export default () => {
     const barTray = Tray();
     const barStatusIcons = StatusIcons({
@@ -115,6 +127,7 @@ export default () => {
             // NumUpdatePackageIndicator,
             emptyArea,
             barTray,
+            CoffeMode,
             ActiveProfile,
             indicatorArea,
         ],

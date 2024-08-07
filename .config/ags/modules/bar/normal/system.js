@@ -237,10 +237,23 @@ const BarNetworkGroup = () => Revealer({
         child: BarNetwork()
     }),
     transition: 'slide_right',
-    setup: (self) => self.hook(showNetworkSpeed, (revealer) => {
-        revealer.reveal_child = showNetworkSpeed.value
-
-    })
+    setup: (self) => self
+        .hook(showNetworkSpeed, (revealer) => {
+            if (showNetworkSpeed.value == true) {
+                revealer.reveal_child = true
+            }
+            else {
+                if (!(Battery.charging || Battery.energy_rate == 0)) {
+                    revealer.reveal_child = false
+                }
+            }
+        }).hook(Battery, (revealer) => {
+            if (Battery.charging || Battery.energy_rate === 0) {
+                revealer.reveal_child = true
+            } else {
+                revealer.reveal_child = false
+            }
+        })
 })
 
 

@@ -31,6 +31,14 @@ const userConfigOptions = {
                 'order': ['gpt', 'gemini', 'waifu', 'booru']
             }
         }
+    },
+    'dock': {
+        'enabled': false
+    },
+    'icons': {
+        'substitutions': {
+
+        }
     }
 }
 
