@@ -10,10 +10,16 @@ Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
 
 // Global vars for external control (through keybinds)
 export const showMusicControls = Variable(false, {})
+export const showNetworkSpeed = Variable(false, {})
 export const showColorScheme = Variable(false, {})
+export const showSystemMonitor = Variable(false, {})
 globalThis['openMusicControls'] = showMusicControls;
 globalThis['openColorScheme'] = showColorScheme;
+globalThis['showNetworkSpeed'] = showNetworkSpeed;
+globalThis['showSystemMonitor'] = showSystemMonitor;
 globalThis['mpris'] = Mpris;
+
+export const coffeeStatus = Variable(false, {})
 
 // Mode switching
 export const currentShellMode = Variable('normal', {}) // normal, focus
@@ -21,7 +27,7 @@ globalThis['currentMode'] = currentShellMode;
 globalThis['cycleMode'] = () => {
     if (currentShellMode.value === 'normal') {
         currentShellMode.value = 'focus';
-    } 
+    }
     else if (currentShellMode.value === 'focus') {
         currentShellMode.value = 'nothing';
     }

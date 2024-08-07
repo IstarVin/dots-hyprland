@@ -14,17 +14,30 @@ const userConfigOptions = {
         'fakeScreenRounding': 2
     },
     'time': {
-        'format': '%I:%M %p'
+        'format': '%I:%M %p',
+        'interval': 60000,
+        'dateInterval': 3600000,
     },
     'search': {
         'engineBaseUrl': "https://search.brave.com/search?q=",
         'excludedSites': [],
+    },
+    'workspaces': {
+        'shown': 10,
     },
     'sidebar': {
         'pages': {
             'apis': {
                 'order': ['gpt', 'gemini', 'waifu', 'booru']
             }
+        }
+    },
+    'dock': {
+        'enabled': false
+    },
+    'icons': {
+        'substitutions': {
+
         }
     }
 }

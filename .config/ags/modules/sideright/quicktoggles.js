@@ -10,6 +10,7 @@ import { BluetoothIndicator, NetworkIndicator } from '../.commonwidgets/statusic
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { sidebarOptionsStack } from './sideright.js';
+import { coffeeStatus } from '../../variables.js';
 
 export const ToggleIconWifi = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
@@ -203,14 +204,14 @@ export const ModuleRawInput = async (props = {}) => {
     };
 }
 
-export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make this work
+export const ModuleIdleInhibitor = Widget.Button({ // TODO: Make this work
     attribute: {
-        enabled: false,
+        enabled: coffeeStatus.bind(),
     },
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Keep system awake',
     onClicked: (self) => {
-        self.attribute.enabled = !self.attribute.enabled;
+        coffeeStatus.value = !coffeeStatus.value;
         self.toggleClassName('sidebar-button-active', self.attribute.enabled);
         if (self.attribute.enabled) Utils.execAsync(['bash', '-c', `pidof wayland-idle-inhibitor.py || ${App.configDir}/scripts/wayland-idle-inhibitor.py`]).catch(print)
         else Utils.execAsync('pkill -f wayland-idle-inhibitor.py').catch(print);
@@ -218,11 +219,12 @@ export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make
     child: MaterialIcon('coffee', 'norm'),
     setup: (self) => {
         setupCursorHover(self);
-        self.attribute.enabled = !!exec('pidof wayland-idle-inhibitor.py');
+        coffeeStatus.value = !!exec('pidof wayland-idle-inhibitor.py');
         self.toggleClassName('sidebar-button-active', self.attribute.enabled);
     },
-    ...props,
+    // ...props,
 });
+globalThis['idleInhibitor'] = () => ModuleIdleInhibitor.onClicked(ModuleIdleInhibitor)
 
 export const ModuleEditIcon = (props = {}) => Widget.Button({ // TODO: Make this work
     ...props,
