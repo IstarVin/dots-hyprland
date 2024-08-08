@@ -205,22 +205,22 @@ export const ModuleRawInput = async (props = {}) => {
 }
 
 export const ModuleIdleInhibitor = Widget.Button({ // TODO: Make this work
-    attribute: {
-        enabled: coffeeStatus.bind(),
-    },
+    // attribute: {
+    //     enabled: coffeeStatus.bind(),
+    // },
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Keep system awake',
     onClicked: (self) => {
         coffeeStatus.value = !coffeeStatus.value;
-        self.toggleClassName('sidebar-button-active', self.attribute.enabled);
-        if (self.attribute.enabled) Utils.execAsync(['bash', '-c', `pidof wayland-idle-inhibitor.py || ${App.configDir}/scripts/wayland-idle-inhibitor.py`]).catch(print)
+        self.toggleClassName('sidebar-button-active', coffeeStatus.value);
+        if (coffeeStatus.value) Utils.execAsync(['bash', '-c', `pidof wayland-idle-inhibitor.py || ${App.configDir}/scripts/wayland-idle-inhibitor.py`]).catch(print)
         else Utils.execAsync('pkill -f wayland-idle-inhibitor.py').catch(print);
     },
     child: MaterialIcon('coffee', 'norm'),
     setup: (self) => {
         setupCursorHover(self);
         coffeeStatus.value = !!exec('pidof wayland-idle-inhibitor.py');
-        self.toggleClassName('sidebar-button-active', self.attribute.enabled);
+        self.toggleClassName('sidebar-button-active', coffeeStatus.value);
     },
     // ...props,
 });

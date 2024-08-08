@@ -85,6 +85,7 @@ alias pn='cat /sys/class/power_supply/BAT0/power_now'
 alias sw='cat /tmp/specialworkspace'
 alias ..='cd ..'
 alias ~='cd ~'
+alias update-mirrors='sudo reflector -a 48 -c JP -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist'
 
 # Shell integrations
 eval "$(fzf --zsh)"
@@ -97,4 +98,4 @@ fi
 
 source ~/.config/zshrc.d/auto-Hypr.sh
 
-PATH="/home/aj/.bin:$PATH"
+PATH="/home/aj/.local/bin/:/home/aj/.bin:$PATH"
