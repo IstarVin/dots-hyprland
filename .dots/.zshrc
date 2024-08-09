@@ -91,6 +91,7 @@ alias update-mirrors='sudo reflector -a 48 -c JP -f 5 -l 20 --sort rate --save /
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
+# eval "$(warp-cli generate-completions zsh)"
 
 if [[ $TERM != "tmux-"* ]]; then
 source ~/.config/zshrc.d/dots-hyprland.zsh

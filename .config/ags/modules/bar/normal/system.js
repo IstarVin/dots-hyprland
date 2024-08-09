@@ -250,7 +250,7 @@ const BarNetworkGroup = () => Revealer({
         }).hook(Battery, (revealer) => {
             if (Battery.charging || Battery.energy_rate === 0) {
                 revealer.reveal_child = true
-            } else {
+            } else if (!showNetworkSpeed.value) {
                 revealer.reveal_child = false
             }
         })
