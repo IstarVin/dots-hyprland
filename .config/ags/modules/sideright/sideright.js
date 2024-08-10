@@ -56,11 +56,11 @@ const centerWidgets = [
         materialIcon: 'tune',
         contentWidget: ModuleConfigure,
     },
-    {
-        name: 'ROG Config',
-        materialIcon: 'laptop_windows',
-        contentWidget: ModuleROGConfigure,
-    },
+    // {
+    //     name: 'ROG Config',
+    //     materialIcon: 'laptop_windows',
+    //     contentWidget: ModuleROGConfigure,
+    // },
 ];
 
 function _secondsToHms(d) {
