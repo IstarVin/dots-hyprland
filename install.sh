@@ -303,7 +303,8 @@ else
 fi
 v sddm_theme_install
 v plymouth_install
-v nvidia_install
+# v nvidia_install
+v setup_qemu
 
 v sudo systemctl enable --now bluetooth
 v sudo systemctl enable --now tailscaled
