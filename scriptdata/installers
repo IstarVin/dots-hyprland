@@ -129,8 +129,8 @@ UUID=$uuid /mnt/AJ btrfs defaults 0 2
         sudo mount -a
         sudo systemctl daemon-reload
 
-        ln -s /mnt/AJ $HOME/AJ
-        ln -s /mnt/AJ/{Documents,Downloads,Pictures,Projects,Videos} $HOME
+        ln -sf /mnt/AJ $HOME/AJ
+        ln -sf /mnt/AJ/{Documents,Downloads,Pictures,Projects,Videos} $HOME
 
         cp -r /mnt/AJ/.ssh/ $HOME
         cwd=$(pwd)
@@ -201,6 +201,10 @@ function plymouth_install() {
 function setup_qemu() {
     yay -S --noconfirm qemu-desktop libvirt edk2-ovmf virt-manager ebtables dnsmasq
     sudo mkdir -p /etc/libvirt/hooks/qemu.d && sudo wget 'https://asus-linux.org/files/vfio/libvirt_hooks/qemu' -O /etc/libvirt/hooks/qemu && sudo chmod +x /etc/libvirt/hooks/qemu
+    uuid="a670b2de-99ca-43e3-8c34-3fc50150c12e"
+    if sudo blkid | grep $uuid >/dev/null 2>&1; then
+        echo ""
+    fi
 }
 
 function nvidia_install() {
