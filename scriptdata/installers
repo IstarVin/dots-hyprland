@@ -207,7 +207,7 @@ function setup_qemu() {
     sudo mkdir -p /etc/libvirt/hooks/qemu.d && sudo wget 'https://asus-linux.org/files/vfio/libvirt_hooks/qemu' -O /etc/libvirt/hooks/qemu && sudo chmod +x /etc/libvirt/hooks/qemu
     sudo systemctl enable --now libvirtd
 
-    sudo usermod -aG libvirtd,kvm,input $USER
+    sudo usermod -aG libvirt,kvm,input "$USER"
 
     uuid="a670b2de-99ca-43e3-8c34-3fc50150c12e"
     if sudo blkid | grep $uuid >/dev/null 2>&1; then
@@ -215,15 +215,18 @@ function setup_qemu() {
         sudo cp -R /mnt/AJ/.dots/etc/libvirt/ /etc
     fi
 
-    echo -ne '
-user = "$USER"
+    virsh -c qemu:///system net-start default
+    virsh -c qemu:///system net-autostart default
+
+    echo -ne "
+user = \"$USER\"
 cgroup_device_acl = [
-    "/dev/null", "/dev/full", "/dev/zero",
-    "/dev/random", "/dev/urandom", "/dev/ptmx",
-    "/dev/kvm", "/dev/rtc", "/dev/hpet", "/dev/kvmfr0"
+    \"/dev/null\", \"/dev/full\", \"/dev/zero\",
+    \"/dev/random\", \"/dev/urandom\", \"/dev/ptmx\",
+    \"/dev/kvm\", \"/dev/rtc\", \"/dev/hpet\", \"/dev/kvmfr0\"
  ]
- group = "kvm"
- ' | sudo tee -a /etc/libvirt/qemu.conf
+ group = \"kvm\"
+ " | sudo tee -a /etc/libvirt/qemu.conf
 
     echo -ne "
 #KVMFR Looking Glass Module
@@ -236,8 +239,15 @@ options kvmfr static_size_mb=32
 " | sudo tee /etc/modprobe.d/kvmfr.conf
 
     echo -ne "
-SUBSYSTEM=="kvmfr", OWNER="$USER", GROUP="kvm", MODE="0660"
+SUBSYSTEM==\"kvmfr\", OWNER=\"$USER\", GROUP=\"kvm\", MODE=\"0660\"
 " | sudo tee /etc/udev/rules.d/99-kvmfr.rules
+}
+
+function waydroid_install() {
+    yay -S waydroid waydroid-image
+    waydroid prop set persist.waydroid.width 1920
+    waydroid prop set persist.waydroid.height 1080
+    waydroid prop set persist.waydroid.fake_wifi "com.internet.speed.meter.lite"
 }
 
 function nvidia_install() {

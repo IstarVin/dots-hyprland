@@ -86,14 +86,12 @@ const TrackProgress = () => {
         const mpris = Mpris.getPlayer('');
         if (!mpris) return;
         // Set circular progress value
-        // execAsync(`notify-send ${mpris.signal}`)
-        // if (mpris.length != 0 && Math.ceil(mpris.length) - Math.ceil(mpris.position) < 3) {
-        // mpris.position - mpris.length
-        // execAsync(`notify-send "${mpris.position} / ${mpris.length}"`)
-        // }
-        // if (mpris.position == mpris.length - 1) {
-        //   execAsync("sleep 1 && playerctl next")
-        // }
+        if (mpris.length != 0 && Math.ceil(mpris.length) - Math.ceil(mpris.position) < 3) {
+            mpris.position - mpris.length
+        }
+        if (mpris.position == mpris.length - 1) {
+            execAsync("sleep 1 && playerctl next")
+        }
         circprog.css = `font-size: ${Math.max(mpris.position / mpris.length * 100, 0)}px;`
     }
     return AnimatedCircProg({
@@ -102,8 +100,8 @@ const TrackProgress = () => {
         // css: 'font-size: 100px'
         extraSetup: (self) => self.css = 'font-size: 100px'
         // extraSetup: (self) => self
-        //   .hook(Mpris, _updateProgress)
-        //   .poll(3000, _updateProgress)
+        //     .hook(Mpris, _updateProgress)
+        //     .poll(3000, _updateProgress)
         // ,
     })
 }
