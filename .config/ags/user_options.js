@@ -37,8 +37,14 @@ const userConfigOptions = {
     },
     'icons': {
         'substitutions': {
-
-        }
+            'thorium-browser': 'thorium'
+        },
+        'regexSubstitutions': [
+            {
+                regex: /^thorium(.+)$/,
+                replace: 'thorium-browser'
+            },
+        ]
     }
 }
 
