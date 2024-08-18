@@ -2,7 +2,7 @@
 
 message="$1"
 if [[ -z $1 ]]; then
-    message="basta"
+    message="update"
 fi
 
 git add .
