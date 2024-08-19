@@ -198,7 +198,7 @@ function plymouth_install() {
 
     sudo sed -i '/^HOOKS/s/udev/& plymouth/' /etc/mkinitcpio.conf
 
-    sudo plymouth-set-default-theme -R colorful_loop
+    sudo plymouth-set-default-theme -R archlinux
 }
 
 function setup_qemu() {
