@@ -116,7 +116,6 @@ export default (monitor = 0) => {
     const emptyArea = SpaceRightDefaultClicks(Widget.Box({ hexpand: true, }));
     const indicatorArea = SpaceRightDefaultClicks(Widget.Box({
         children: [
-            SeparatorDot(),
             barStatusIcons
         ],
     }));
@@ -127,6 +126,7 @@ export default (monitor = 0) => {
             // NumUpdatePackageIndicator,
             emptyArea,
             barTray,
+            SeparatorDot(),
             CoffeMode,
             ActiveProfile,
             indicatorArea,

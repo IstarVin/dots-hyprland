@@ -304,7 +304,7 @@ fi
 v sddm_theme_install
 v plymouth_install
 # v nvidia_install
-v setup_qemu
+# v setup_qemu
 
 v sudo systemctl enable --now bluetooth
 v sudo systemctl enable --now tailscaled
@@ -314,6 +314,7 @@ v git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal foot
 
 sudo ufw enable
+sudo systemctl enable ufw
 
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"

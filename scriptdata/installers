@@ -244,7 +244,7 @@ SUBSYSTEM==\"kvmfr\", OWNER=\"$USER\", GROUP=\"kvm\", MODE=\"0660\"
 }
 
 function waydroid_install() {
-    yay -S waydroid waydroid-image
+    yay -S waydroid waydroid-image python-pyclipper --noconfirm
     waydroid prop set persist.waydroid.width 1920
     waydroid prop set persist.waydroid.height 1080
     waydroid prop set persist.waydroid.fake_wifi "com.internet.speed.meter.lite"

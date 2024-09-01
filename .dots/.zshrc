@@ -93,6 +93,8 @@ alias sw='cat /tmp/specialworkspace'
 alias ..='cd ..'
 alias ~='cd ~'
 alias update-mirrors='sudo reflector -a 48 -c JP -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist'
+alias 60fps='hyprctl keyword monitor ,1920x1080@60,,1'
+alias 144fps='hyprctl keyword monitor ,1920x1080@144,,1'
 
 # Shell integrations
 eval "$(fzf --zsh)"
