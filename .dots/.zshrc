@@ -19,7 +19,7 @@ zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
-zinit light MichaelAquilina/zsh-autoswitch-virtualenv
+#zinit light MichaelAquilina/zsh-autoswitch-virtualenv
 
 # Add in snippets
 zinit snippet OMZP::git
@@ -95,6 +95,9 @@ alias ~='cd ~'
 alias update-mirrors='sudo reflector -a 48 -c JP -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist'
 alias 60fps='hyprctl keyword monitor ,1920x1080@60,,1'
 alias 144fps='hyprctl keyword monitor ,1920x1080@144,,1'
+alias Quiet='asusctl profile -P Quiet'
+alias Balanced='asusctl profile -P Balanced'
+alias Performance='asusctl profile -P Performance'
 
 # Shell integrations
 eval "$(fzf --zsh)"
@@ -108,4 +111,6 @@ fi
 
 source ~/.config/zshrc.d/auto-Hypr.sh
 
-PATH="/home/aj/.local/bin/:/home/aj/.bin:$PATH"
+# source ~/.bash_profile
+
+PATH="/home/aj/.local/bin/:/home/aj/.bin:/home/aj/.config/hypr/scripts:$PATH"

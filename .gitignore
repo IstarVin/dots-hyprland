@@ -7,4 +7,5 @@
 __pycache__/
 *.py[cod]
 
-*/**/plugins
+# */**/plugins
+.config/tmux/plugins
