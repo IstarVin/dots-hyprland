@@ -4,15 +4,19 @@ import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 import Variable from 'resource:///com/github/Aylur/ags/variable.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { exec, execAsync } = Utils;
+const battery = await Service.import('battery')
+// const { exec, execAsync } = Utils;
 
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
 
+// const showStats = battery.charging || battery.energy_rate === 0
+const showStats = false
+
 // Global vars for external control (through keybinds)
 export const showMusicControls = Variable(false, {})
-export const showNetworkSpeed = Variable(false, {})
+export const showNetworkSpeed = Variable(showStats, {})
 export const showColorScheme = Variable(false, {})
-export const showSystemMonitor = Variable(false, {})
+export const showSystemMonitor = Variable(showStats, {})
 globalThis['openMusicControls'] = showMusicControls;
 globalThis['openColorScheme'] = showColorScheme;
 globalThis['showNetworkSpeed'] = showNetworkSpeed;

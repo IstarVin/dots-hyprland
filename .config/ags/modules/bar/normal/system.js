@@ -238,21 +238,25 @@ const BarNetworkGroup = () => Revealer({
     }),
     transition: 'slide_right',
     setup: (self) => self
+        // .hook(Battery, (revealer) => {
+        //     if (Battery.charging || Battery.energy_rate === 0) {
+        //         revealer.reveal_child = true
+        //         } else if (!showNetworkSpeed.value) {
+        //     }
+        //     else {
+        //         revealer.reveal_child = false
+        //     }
+        // })
         .hook(showNetworkSpeed, (revealer) => {
-            if (showNetworkSpeed.value == true) {
-                revealer.reveal_child = true
-            }
-            else {
-                if (!(Battery.charging || Battery.energy_rate == 0)) {
-                    revealer.reveal_child = false
-                }
-            }
-        }).hook(Battery, (revealer) => {
-            if (Battery.charging || Battery.energy_rate === 0) {
-                revealer.reveal_child = true
-            } else if (!showNetworkSpeed.value) {
-                revealer.reveal_child = false
-            }
+            revealer.reveal_child = showNetworkSpeed.value
+            // if (showNetworkSpeed.value == true) {
+            //     revealer.reveal_child = true
+            // }
+            // else {
+            //     // if (!(Battery.charging || Battery.energy_rate == 0)) {
+            //     revealer.reveal_child = false
+            //     // }
+            // }
         })
 })
 

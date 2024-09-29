@@ -99,6 +99,8 @@ alias Quiet='asusctl profile -P Quiet'
 alias Balanced='asusctl profile -P Balanced'
 alias Performance='asusctl profile -P Performance'
 
+alias charge='asusctl -c'
+
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
@@ -114,3 +116,4 @@ source ~/.config/zshrc.d/auto-Hypr.sh
 # source ~/.bash_profile
 
 PATH="/home/aj/.local/bin/:/home/aj/.bin:/home/aj/.config/hypr/scripts:$PATH"
+PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"

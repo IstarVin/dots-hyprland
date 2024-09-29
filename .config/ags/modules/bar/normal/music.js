@@ -216,22 +216,23 @@ export default () => {
                 //     revealer.reveal_child = false
                 // }
                 // })
-                .hook(battery, revealer => {
-                    if (battery.charging || battery.energy_rate == 0) {
-                        revealer.reveal_child = true
-                    } else {
-                        revealer.reveal_child = false
-                    }
-                })
+                // .hook(battery, revealer => {
+                //     if (battery.charging || battery.energy_rate == 0) {
+                //         revealer.reveal_child = true
+                //     } else {
+                //         revealer.reveal_child = false
+                //     }
+                // })
                 .hook(showSystemMonitor, revealer => {
-                    if (showSystemMonitor.value == true) {
-                        revealer.reveal_child = true
-                    }
-                    else {
-                        if (!(battery.charging || battery.energy_rate == 0)) {
-                            revealer.reveal_child = false
-                        }
-                    }
+                    revealer.reveal_child = showSystemMonitor.value
+                    // if (showSystemMonitor.value == true) {
+                    //     revealer.reveal_child = true
+                    // }
+                    // else {
+                    //     // if (!(battery.charging || battery.energy_rate == 0)) {
+                    //     revealer.reveal_child = false
+                    //     // }
+                    // }
                 })
 
             // BarResource('CPU Usage', 'memory', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
