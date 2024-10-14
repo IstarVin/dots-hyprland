@@ -7,6 +7,7 @@ source ./scriptdata/installers
 source ./scriptdata/options
 
 v makepkg_patch
+v install_rubik
 
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1; then

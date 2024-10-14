@@ -112,6 +112,7 @@ source ~/.config/zshrc.d/dots-hyprland.zsh
 fi
 
 source ~/.config/zshrc.d/auto-Hypr.sh
+source /etc/profile
 
 # source ~/.bash_profile
 
