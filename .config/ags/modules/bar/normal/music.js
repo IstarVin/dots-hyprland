@@ -145,22 +145,18 @@ export default () => {
             ]
         })]
     });
-    const trackTitle = Button({
-        child:
-            Label({
-                hexpand: true,
-                className: 'txt-smallie bar-music-txt',
-                truncate: 'end',
-                maxWidthChars: 1, // Doesn't matter, just needs to be non negative
-                setup: (self) => self.hook(Mpris, label => {
-                    const mpris = Mpris.getPlayer('');
-                    if (mpris)
-                        label.label = `${trimTrackTitle(mpris.trackTitle)} • ${mpris.trackArtists.join(', ')}`;
-                    else
-                        label.label = 'No media';
-                }),
-            }),
-        onPrimaryClickRelease: () => execAsync("hyprctl dispatch togglespecialworkspace music").catch(print)
+    const trackTitle = Label({
+        hexpand: true,
+        className: 'txt-smallie bar-music-txt',
+        truncate: 'end',
+        maxWidthChars: 1, // Doesn't matter, just needs to be non negative
+        setup: (self) => self.hook(Mpris, label => {
+            const mpris = Mpris.getPlayer('');
+            if (mpris)
+                label.label = `${trimTrackTitle(mpris.trackTitle)} • ${mpris.trackArtists.join(', ')}`;
+            else
+                label.label = getString('No media');
+        }),
     })
     const musicStuff = Box({
         className: 'spacing-h-10',
@@ -199,11 +195,11 @@ export default () => {
             child: BarGroup({
                 child: Box({
                     children: [
-                        BarResource('CPU Usage', 'memory', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
+                        BarResource(getString('CPU Usage'), 'memory', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
                             'bar-cpu-circprog', 'bar-cpu-txt', 'bar-cpu-icon'),
-                        BarResource('RAM Usage', 'memory_alt', `LANG=C free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`,
+                        BarResource(getString('RAM Usage'), 'memory_alt', `LANG=C free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`,
                             'bar-ram-circprog', 'bar-ram-txt', 'bar-ram-icon'),
-                        BarResource('Temperature', 'device_thermostat', `echo $(expr $(cat /sys/devices/virtual/thermal/thermal_zone0/temp) / 1000)`,
+                        BarResource(getString('Temperature'), 'device_thermostat', `echo $(expr $(cat /sys/devices/virtual/thermal/thermal_zone0/temp) / 1000)`,
                             'bar-ram-circprog', 'bar-ram-txt', 'bar-ram-icon', '°C'),
                     ]
                 }),

@@ -5,8 +5,10 @@ import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 import Variable from 'resource:///com/github/Aylur/ags/variable.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const battery = await Service.import('battery')
-// const { exec, execAsync } = Utils;
-
+const { exec, execAsync } = Utils;
+import { init as i18n_init, getString } from './i18n/i18n.js'
+//init i18n, Load language file
+i18n_init()
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
 
 // const showStats = battery.charging || battery.energy_rate === 0
@@ -24,6 +26,8 @@ globalThis['showSystemMonitor'] = showSystemMonitor;
 globalThis['mpris'] = Mpris;
 
 export const coffeeStatus = Variable(false, {})
+globalThis['getString'] = getString
+
 // load monitor shell modes from userOptions
 const initialMonitorShellModes = () => {
     const numberOfMonitors = Gdk.Display.get_default()?.get_n_monitors() || 1;
