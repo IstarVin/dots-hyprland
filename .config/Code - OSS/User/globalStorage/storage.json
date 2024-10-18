@@ -7,7 +7,9 @@
             "file:///home/aj/Projects/data-struct": "__default__profile__",
             "file:///home/aj/Projects/deno-prac": "__default__profile__"
         },
-        "emptyWindows": {}
+        "emptyWindows": {
+            "1729255029323": "__default__profile__"
+        }
     },
     "profileAssociationsMigration": true,
     "telemetry.sqmId": "",
@@ -17,12 +19,12 @@
         "workspaces": [],
         "folders": [
             {
-                "folderUri": "file:///home/aj/Projects/deno-prac"
+                "folderUri": "file:///home/aj/Projects/dots-hyprland"
             }
         ],
         "emptyWindows": [
             {
-                "backupFolder": "1729062306012"
+                "backupFolder": "1729255029323"
             }
         ]
     },
