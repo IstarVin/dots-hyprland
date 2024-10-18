@@ -1,0 +1,9 @@
+console.log("asdlvi");
+
+Deno.serve((_req) => {
+    return new Response("<h1>hi</h1>");
+});
+
+export function add(num1: number, num2: number) {
+    return num1 + num2;
+}

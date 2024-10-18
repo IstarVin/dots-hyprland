@@ -107,7 +107,7 @@ eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
 # eval "$(warp-cli generate-completions zsh)"
 
-if [[ $TERM != "tmux-"* ]]; then
+if [[ $TERM != "tmux-"* && $TERM_PROGRAM != "vscode" ]]; then
 source ~/.config/zshrc.d/dots-hyprland.zsh
 fi
 
