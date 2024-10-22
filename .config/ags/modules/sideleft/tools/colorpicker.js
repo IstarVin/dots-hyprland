@@ -9,6 +9,7 @@ const { Box, Button, Entry, EventBox, Icon, Label, Overlay, Scrollable } = Widge
 import SidebarModule from './module.js';
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
+import { getString } from '../../../i18n/i18n.js';
 
 import { ColorPickerSelection, hslToHex, hslToRgbValues, hexToHSL } from './color.js';
 import { clamp } from '../../.miscutils/mathfuncs.js';

@@ -136,6 +136,8 @@ UUID=$uuid /mnt/AJ btrfs defaults 0 2
 		cd /mnt/AJ/Projects/dots-hyprland
 		bash link_configs.sh
 		cd $cwd
+
+		mkdir ~/.hehe
 	fi
 }
 

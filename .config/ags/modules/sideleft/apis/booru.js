@@ -11,6 +11,7 @@ import BooruService from '../../../services/booru.js';
 import { chatEntry } from '../apiwidgets.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
 import { SystemMessage } from './ai_chatmessage.js';
+import { getString } from '../../../i18n/i18n.js';
 
 const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
 const USER_CACHE_DIR = GLib.get_user_cache_dir();

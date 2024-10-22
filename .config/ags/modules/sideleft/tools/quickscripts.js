@@ -7,6 +7,7 @@ const { Box, Button, EventBox, Icon, Label, Scrollable } = Widget;
 import SidebarModule from './module.js';
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
+import { getString } from '../../../i18n/i18n.js';
 
 import { distroID, isArchDistro, isDebianDistro, hasFlatpak } from '../../.miscutils/system.js';
 

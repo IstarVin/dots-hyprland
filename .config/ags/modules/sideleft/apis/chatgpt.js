@@ -12,6 +12,7 @@ import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { chatEntry } from '../apiwidgets.js';
+import { getString } from '../../../i18n/i18n.js';
 
 export const chatGPTTabIcon = Icon({
     hpack: 'center',

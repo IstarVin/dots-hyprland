@@ -13,6 +13,7 @@ import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/curso
 import WaifuService from '../../../services/waifus.js';
 import { darkMode } from '../../.miscutils/system.js';
 import { chatEntry } from '../apiwidgets.js';
+import { getString } from '../../../i18n/i18n.js';
 
 async function getImageViewerApp(preferredApp) {
     Utils.execAsync(['bash', '-c', `command -v ${preferredApp}`])

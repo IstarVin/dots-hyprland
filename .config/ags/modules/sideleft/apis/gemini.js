@@ -11,6 +11,7 @@ import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../.common
 import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { chatEntry } from '../apiwidgets.js';
+import { getString } from '../../../i18n/i18n.js';
 
 const MODEL_NAME = `Gemini`;
 

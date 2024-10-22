@@ -5,6 +5,7 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 const { execAsync, exec } = Utils;
 const { Box, Button, CenterBox, EventBox, Icon, Label, Scrollable } = Widget;
+import { getString } from '../../../i18n/i18n.js';
 
 export default () => Box({
     className: 'txt sidebar-module techfont',

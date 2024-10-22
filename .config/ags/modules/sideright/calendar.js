@@ -8,6 +8,8 @@ import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { TodoWidget } from "./todolist.js";
 import { getCalendarLayout } from "./calendar_layout.js";
 
+import { getString } from '../../i18n/i18n.js';
+
 let calendarJson = getCalendarLayout(undefined, true);
 let monthshift = 0;
 
