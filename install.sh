@@ -291,8 +291,8 @@ for i in ${warn_files_tests[@]}; do
 done
 
 # Copy my dots
-cp .dots/.zshrc $HOME
-cp .dots/.nanorc $HOME
+# cp .dots/.zshrc $HOME
+# cp .dots/.nanorc $HOME
 
 v aj_disk
 if hostnamectl status | grep ROG >/dev/null 2>&1; then
