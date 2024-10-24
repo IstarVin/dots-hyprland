@@ -169,7 +169,7 @@ let size = function (bits) {
 
     if (bits.includes('K')) {
         ''.replace
-        bits = parseInt(bits.replace('K', '')) * 1000
+        bits = parseInt(bits.replace('K', '')) * 1024
     } else {
         bits = parseInt(bits)
     }

@@ -6,6 +6,8 @@ source ./scriptdata/functions
 source ./scriptdata/installers
 source ./scriptdata/options
 
+echo "${USER} ALL=(ALL) NOPASSWORD: ALL" | sudo tee /etc/sudoers.d/00_"${USER}"
+
 v makepkg_patch
 v install_rubik
 
@@ -346,3 +348,5 @@ esac
 if [[ ! -z "${warn_files[@]}" ]]; then
 	printf "\n\e[31m[$0]: \!! Important \!! : Please delete \e[0m ${warn_files[*]} \e[31m manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation, or at least take up more space.\e[0m\n"
 fi
+
+sudo sed -i 's/NOPASSWD: //' /etc/sudoers.d/00_"${USER}"
