@@ -6,7 +6,7 @@ source ./scriptdata/functions
 source ./scriptdata/installers
 source ./scriptdata/options
 
-echo "${USER} ALL=(ALL) NOPASSWORD: ALL" | sudo tee /etc/sudoers.d/00_"${USER}"
+echo "${USER} ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/00_"${USER}"
 
 v makepkg_patch
 v install_rubik
