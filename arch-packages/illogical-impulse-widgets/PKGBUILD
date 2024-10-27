@@ -13,6 +13,6 @@ depends=(
     hyprlock
     wlogout
     wl-clipboard
-    hyprpicker-git
+    hyprpicker
     # anyrun-git
 )
