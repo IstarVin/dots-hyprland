@@ -6,6 +6,9 @@ source ./scriptdata/functions
 source ./scriptdata/installers
 source ./scriptdata/options
 
+# My Custom Script
+source ./scriptdata/custom
+
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1; then 
   printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n"
@@ -99,6 +102,8 @@ install-local-pkgbuild() {
 	x popd
 }
 
+sudo_nopasswd
+
 # Install core dependencies from the meta-packages
 metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,kde,portal,python,screencapture,toolkit,widgets})
 metapkgs+=(./arch-packages/illogical-impulse-hyprland)
@@ -144,6 +149,7 @@ v sudo systemctl enable bluetooth --now
 v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
+remove_nopasswd
 
 #####################################################################################
 printf "\e[36m[$0]: 2. Copying + Configuring\e[0m\n"

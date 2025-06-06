@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+sudo_nopasswd() {
+    echo "${username} ALL=(ALL) NOPASSWD: ALL" | sudo tee /mnt/etc/sudoers.d/00_"${username}"
+}
+remove_nopasswd() {
+    sudo sed -i 's/NOPASSWD: //' /mnt/etc/sudoers.d/00_"$username"
+}
