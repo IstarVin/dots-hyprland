@@ -181,13 +181,19 @@ case $SKIP_MISCCONF in
     for i in $(find .config/ -mindepth 1 -maxdepth 1 -exec basename {} \;); do
 #      i=".config/$i"
       echo "[$0]: Found target: .config/$i"
-      if [ -d ".config/$i" ];then v rsync -av --delete ".config/$i/" "$XDG_CONFIG_HOME/$i/"
-      elif [ -f ".config/$i" ];then v ln -sf ".config/$i" "$XDG_CONFIG_HOME/$i"
-      # elif [ -f ".config/$i" ];then v rsync -av ".config/$i" "$XDG_CONFIG_HOME/$i"
-      fi
+      v rm -rf "$XDG_CACHE_HOME/$i"
+      v ln -sf ".config/$i" "$XDG_CONFIG_HOME/$i"
     done
     ;;
 esac
+
+for i in $(find .dots/ -mindepth 1 -maxdepth 1 -exec basename {} \;); do
+#      i=".config/$i"
+  echo "[$0]: Found target: .dots/$i"
+  rm -rf ~/$i
+  ln -sf ".dots/$i" "~/$i"
+  fi
+done
 
 # case $SKIP_FISH in
 #   true) sleep 0;;
