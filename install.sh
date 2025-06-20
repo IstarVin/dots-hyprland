@@ -156,6 +156,7 @@ v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 v kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Darkly
 
+v install_deps
 v aj_disk
 v plymouth_install
 v evremap_install
