@@ -6,6 +6,9 @@ source ./scriptdata/functions
 source ./scriptdata/installers
 source ./scriptdata/options
 
+# My Custom Script
+source ./scriptdata/custom
+
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1; then 
   printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n"
@@ -104,6 +107,8 @@ install-local-pkgbuild() {
 	x popd
 }
 
+sudo_nopasswd
+
 # Install core dependencies from the meta-packages
 metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,kde,portal,python,screencapture,toolkit,widgets})
 metapkgs+=(./arch-packages/illogical-impulse-hyprland)
@@ -151,6 +156,12 @@ v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 v kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Darkly
 
+v aj_disk
+v plymouth_install
+v evremap_install
+v rog_install
+
+remove_nopasswd
 
 #####################################################################################
 printf "\e[36m[$0]: 2. Copying + Configuring\e[0m\n"
@@ -166,68 +177,70 @@ v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME
 case $SKIP_MISCCONF in
   true) sleep 0;;
   *)
-    for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
+    # for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
+    for i in $(find .config/ -mindepth 1 -maxdepth 1 -exec basename {} \;); do
 #      i=".config/$i"
       echo "[$0]: Found target: .config/$i"
       if [ -d ".config/$i" ];then v rsync -av --delete ".config/$i/" "$XDG_CONFIG_HOME/$i/"
-      elif [ -f ".config/$i" ];then v rsync -av ".config/$i" "$XDG_CONFIG_HOME/$i"
+      elif [ -f ".config/$i" ];then v ln -sf ".config/$i" "$XDG_CONFIG_HOME/$i"
+      # elif [ -f ".config/$i" ];then v rsync -av ".config/$i" "$XDG_CONFIG_HOME/$i"
       fi
     done
     ;;
 esac
 
-case $SKIP_FISH in
-  true) sleep 0;;
-  *)
-    v rsync -av --delete .config/fish/ "$XDG_CONFIG_HOME"/fish/
-    ;;
-esac
+# case $SKIP_FISH in
+#   true) sleep 0;;
+#   *)
+#     v rsync -av --delete .config/fish/ "$XDG_CONFIG_HOME"/fish/
+#     ;;
+# esac
 
 # For Hyprland
-case $SKIP_HYPRLAND in
-  true) sleep 0;;
-  *)
-    v rsync -av --delete --exclude '/custom' --exclude '/hyprlock.conf' --exclude '/hypridle.conf' --exclude '/hyprland.conf' .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
-    t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
-    if [ -f $t ];then
-      echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
-      v mv $t $t.old
-      v cp -f .config/hypr/hyprland.conf $t
-      existed_hypr_conf_firstrun=y
-    else
-      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
-      v cp .config/hypr/hyprland.conf $t
-      existed_hypr_conf=n
-    fi
-    t="$XDG_CONFIG_HOME/hypr/hypridle.conf"
-    if [ -f $t ];then
-      echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
-      v cp -f .config/hypr/hypridle.conf $t.new
-      existed_hypridle_conf=y
-    else
-      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
-      v cp .config/hypr/hypridle.conf $t
-      existed_hypridle_conf=n
-    fi
-    t="$XDG_CONFIG_HOME/hypr/hyprlock.conf"
-    if [ -f $t ];then
-      echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
-      v cp -f .config/hypr/hyprlock.conf $t.new
-      existed_hyprlock_conf=y
-    else
-      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
-      v cp .config/hypr/hyprlock.conf $t
-      existed_hyprlock_conf=n
-    fi
-    t="$XDG_CONFIG_HOME/hypr/custom"
-    if [ -d $t ];then
-      echo -e "\e[34m[$0]: \"$t\" already exists, will not do anything.\e[0m"
-    else
-      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
-      v rsync -av --delete .config/hypr/custom/ $t/
-    fi
-    ;;
-esac
+# case $SKIP_HYPRLAND in
+#   true) sleep 0;;
+#   *)
+#     v rsync -av --delete --exclude '/custom' --exclude '/hyprlock.conf' --exclude '/hypridle.conf' --exclude '/hyprland.conf' .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
+#     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
+#     if [ -f $t ];then
+#       echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+#       v mv $t $t.old
+#       v cp -f .config/hypr/hyprland.conf $t
+#       existed_hypr_conf_firstrun=y
+#     else
+#       echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+#       v cp .config/hypr/hyprland.conf $t
+#       existed_hypr_conf=n
+#     fi
+#     t="$XDG_CONFIG_HOME/hypr/hypridle.conf"
+#     if [ -f $t ];then
+#       echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+#       v cp -f .config/hypr/hypridle.conf $t.new
+#       existed_hypridle_conf=y
+#     else
+#       echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+#       v cp .config/hypr/hypridle.conf $t
+#       existed_hypridle_conf=n
+#     fi
+#     t="$XDG_CONFIG_HOME/hypr/hyprlock.conf"
+#     if [ -f $t ];then
+#       echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+#       v cp -f .config/hypr/hyprlock.conf $t.new
+#       existed_hyprlock_conf=y
+#     else
+#       echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+#       v cp .config/hypr/hyprlock.conf $t
+#       existed_hyprlock_conf=n
+#     fi
+#     t="$XDG_CONFIG_HOME/hypr/custom"
+#     if [ -d $t ];then
+#       echo -e "\e[34m[$0]: \"$t\" already exists, will not do anything.\e[0m"
+#     else
+#       echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+#       v rsync -av --delete .config/hypr/custom/ $t/
+#     fi
+#     ;;
+# esac
 
 
 # some foldes (eg. .local/bin) should be processed separately to avoid `--delete' for rsync,

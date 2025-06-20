@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+sudo_nopasswd() {
+    echo "${username} ALL=(ALL) NOPASSWD: ALL" | sudo tee /mnt/etc/sudoers.d/00_"${username}"
+}
+remove_nopasswd() {
+    sudo sed -i 's/NOPASSWD: //' /mnt/etc/sudoers.d/00_"$username"
+}
+
+plymouth_install() {
+    yay -S --noconfirm plymouth plymouth-theme-archlinux
+    if pacman -Q grub >/dev/null 2>&1; then
+        sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash/' /etc/default/grub
+        sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/' /etc/default/grub
+
+        sudo sed -i '/echo "\$message"/d' /etc/grub.d/10_linux
+
+        sudo grub-mkconfig -o /boot/grub/grub.cfg
+    fi
+
+    sudo sed -i '/^HOOKS/s/udev/& plymouth/' /etc/mkinitcpio.conf
+
+    sudo plymouth-set-default-theme -R archlinux
+}
+
+aj_disk() {
+    uuid="a670b2de-99ca-43e3-8c34-3fc50150c12e"
+    if sudo blkid | grep $uuid >/dev/null 2>&1; then
+        ln -sf /mnt/AJ $HOME/AJ
+        ln -sf /mnt/AJ/{Documents,Downloads,Pictures,Projects,Videos} $HOME
+
+        cp -r /mnt/AJ/.ssh/ $HOME
+
+        mkdir ~/.hehe
+        mkdir ~/.secrets
+    fi
+}
+
+evremap_install() {
+    yay -S --noconfirm evremap
+    echo -ne "
+device_name = "Asus Keyboard"
+
+[[remap]]
+input = ["KEY_LEFTCTRL", "KEY_H"]
+output = ["KEY_LEFT"]
+
+[[remap]]
+input = ["KEY_LEFTCTRL", "KEY_J"]
+output = ["KEY_DOWN"]
+
+[[remap]]
+input = ["KEY_LEFTCTRL", "KEY_K"]
+output = ["KEY_UP"]
+
+[[remap]]
+input = ["KEY_LEFTCTRL", "KEY_L"]
+output = ["KEY_RIGHT"]
+
+[[dual_role]]
+input = "KEY_CAPSLOCK"
+hold = ["KEY_RIGHTCTRL"]
+tap = ["KEY_ESC"]
+    " | sudo tee /etc/evremap.toml
+
+    echo -ne "
+[Service]
+ExecStart=bash -c "/usr/bin/evremap remap /etc/evremap.toml -d 0"
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+    " | sudo tee /etc/systemd/user/evremap.service
+
+    sudo systemctl enable --now evremap
+}
+
+rog_install() {
+    yay -S --noconfirm asusctl power-profiles-daemon supergfxctl switcheroo-control
+    sudo systemctl enable --now power-profiles-daemon supergfxd switcheroo-control
+}
