@@ -6,9 +6,6 @@ source ./scriptdata/functions
 source ./scriptdata/installers
 source ./scriptdata/options
 
-# My Custom Script
-source ./scriptdata/custom
-
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1; then
   printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n"
@@ -155,12 +152,6 @@ v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 v kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Darkly
 
-v install_deps
-v aj_disk
-v plymouth_install
-v evremap_install
-v rog_install
-
 remove_nopasswd
 
 #####################################################################################
@@ -182,7 +173,7 @@ case $SKIP_MISCCONF in
 #      i=".config/$i"
       echo "[$0]: Found target: .config/$i"
       v rm -rf "$XDG_CACHE_HOME/$i"
-      v ln -sf ".config/$i" "$XDG_CONFIG_HOME/$i"
+      v ln -sf "$(pwd)/.config/$i" "$XDG_CONFIG_HOME/$i"
     done
     ;;
 esac
@@ -191,8 +182,7 @@ for i in $(find .dots/ -mindepth 1 -maxdepth 1 -exec basename {} \;); do
 #      i=".config/$i"
   echo "[$0]: Found target: .dots/$i"
   rm -rf ~/$i
-  ln -sf ".dots/$i" "~/$i"
-  fi
+  ln -sf "$(pwd)/.dots/$i" "${HOME}/$i"
 done
 
 # case $SKIP_FISH in

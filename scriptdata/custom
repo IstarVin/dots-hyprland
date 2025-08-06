@@ -10,7 +10,7 @@ remove_nopasswd() {
 install_deps() {
     yay -S --noconfirm --needed \
         lsd fzf zoxide zsh bat less btop \
-        ttf-space-mono-nerd ttf-ms-win10-auto yt-dlp bind nmap youtube-music \
+        ttf-space-mono-nerd yt-dlp bind nmap youtube-music \
         jellyfin-mpv-shim python-pystray noto-fonts noto-fonts-emoji noto-fonts-cjk \
         gnome-text-editor ufw encfs seahorse gvfs-smb amdvlk reflector \
         neovim ntfs-3g nautilus-code nautilus-open-any-terminal mpv tailscale \

@@ -6,7 +6,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[javascript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -14,15 +14,6 @@
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  // "[json]": {
-  //     "editor.defaultFormatter": "denoland.vscode-deno"
-  // },
-  // "[jsonc]": {
-  //     "editor.defaultFormatter": "denoland.vscode-deno"
-  // },
-  // "[python]": {
-  //     "editor.defaultFormatter": "charliermarsh.ruff"
-  // },
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode",
     "editor.tabSize": 2
@@ -31,7 +22,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.tabSize": 2
   },
-  "breadcrumbs.enabled": false,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "catppuccin-icons.hidesExplorerArrows": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always",
@@ -40,7 +33,6 @@
   "editor.cursorBlinking": "phase",
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.cursorSurroundingLines": 12,
-  // "editor.fontFamily": "SpaceMono Nerd Font",
   "editor.fontFamily": "'Cascadia Code',  monospace",
   "editor.fontLigatures": true,
   "editor.formatOnSave": true,
@@ -77,11 +69,15 @@
   "editor.selectionHighlight": false,
   "editor.smoothScrolling": true,
   "editor.stickyScroll.enabled": false,
+  "editor.suggest.localityBonus": true,
+  "editor.suggestSelection": "recentlyUsed",
   "editor.wordWrap": "off",
   "explorer.excludeGitIgnore": false,
   "explorer.incrementalNaming": "smart",
+  "extensions.ignoreRecommendations": true,
   "files.associations": {
-    ".env*": "dotenv"
+    ".env*": "dotenv",
+    "*.css": "tailwindcss"
   },
   "git.enableSmartCommit": true,
   "git.openRepositoryInParentFolders": "never",
@@ -92,8 +88,10 @@
     "plaintext": false,
     "scminput": false
   },
+  "javascript.suggest.autoImports": true,
   "prettier.tabWidth": 2,
   "problems.decorations.enabled": false,
+  "python.languageServer": "Pylance",
   "sqltools.useNodeRuntime": true,
   "svelte.enable-ts-plugin": true,
   "terminal.explorerKind": "external",
@@ -123,6 +121,7 @@
   "terminal.integrated.shellIntegration.history": 1000,
   "terminal.integrated.smoothScrolling": true,
   "terminal.integrated.stickyScroll.enabled": true,
+  "typescript.preferences.importModuleSpecifier": "shortest",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "vim.cursorStylePerMode.replace": "underline",
   "vim.normalModeKeyBindings": [
@@ -142,7 +141,9 @@
   "window.restoreWindows": "none",
   "window.titleBarStyle": "native",
   "window.zoomLevel": 1.25,
+  "workbench.colorTheme": "Catppuccin Mocha",
   "workbench.editor.enablePreviewFromQuickOpen": false,
+  "workbench.iconTheme": "catppuccin-mocha",
   "workbench.layoutControl.enabled": false,
   "workbench.sideBar.location": "right",
   "workbench.startupEditor": "none",
@@ -151,21 +152,5 @@
   "zenMode.fullScreen": false,
   "zenMode.hideLineNumbers": false,
   "zenMode.hideStatusBar": true,
-  "zenMode.showTabs": "none",
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "workbench.iconTheme": "catppuccin-mocha",
-  "[dart]": {
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
-    "editor.rulers": [80],
-    "editor.selectionHighlight": false,
-    "editor.tabCompletion": "onlySnippets",
-    "editor.wordBasedSuggestions": "off"
-  },
-  "workbench.colorTheme": "Catppuccin Mocha",
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "zenMode.showTabs": "none"
 }

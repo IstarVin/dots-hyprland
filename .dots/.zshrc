@@ -1,5 +1,6 @@
 # Add deno completions to search path
 if [[ ":$FPATH:" != *":/home/aj/.zsh/completions:"* ]]; then export FPATH="/home/aj/.zsh/completions:$FPATH"; fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -94,7 +95,12 @@ function yy() {
 	rm -f -- "$tmp"
 }
 
+if [[ $TERM == "xterm-kitty" ]]; then
+  alias ssh='kitty +kitten ssh'
+fi
+
 # aliases
+alias l='lsd'
 alias ls='lsd'
 # alias vim='nvim'
 alias c='clear'
@@ -126,6 +132,7 @@ alias keyboard_color='asusctl aura static -c 803dba'
 alias home-server='ssh home-server'
 alias aj-server='ssh aj-server'
 alias source-zsh='source ~/.zshrc'
+alias ip='ip -c'
 
 alias mpv-hehe='/mnt/AJ/Projects/mpv-shim-hehe/main'
 
@@ -134,23 +141,27 @@ alias animation-on='hyprctl keyword animations:enabled 1'
 
 alias nvrun='switcherooctl launch -g 1'
 
+alias source-funcs='source <(curl -s https://arch-install.pages.dev/other/functions.sh)'
+
+alias kali='distrobox enter kali'
+alias factordb='uv --directory /mnt/AJ/Projects/factordb run /mnt/AJ/Projects/factordb/factordb.py'
+alias pcrt='python2 /mnt/AJ/Projects/ctf/PCRT/PCRT.py'
+alias grepico='grep -o "picoCTF{.*}"'
+alias copy='wl-copy'
+alias grepicopy='grepico|copy'
+
 # Shell integrations
 eval "$(fzf --zsh)"
-eval "$(zoxide init --cmd cd zsh)"
+eval "$(zoxide init zsh)"
 # eval "$(starship init zsh)"
 # eval "$(warp-cli generate-completions zsh)"
 
 #if [[ $TERM != "tmux-"* && $TERM_PROGRAM != "vscode" ]]; then
 #source ~/.config/zshrc.d/dots-hyprland.zsh
 #fi
-if [[ $TERM == "xterm-kitty" ]]; then
-    alias ssh='kitty +kitten ssh'
-fi
+#
 
 #source ~/.config/zshrc.d/auto-Hypr.sh
-# source /etc/profile
-
-# source ~/.bash_profile
 
 #eval $(warp-cli generate-completions zsh)
 
@@ -158,6 +169,13 @@ PATH="/home/aj/.local/bin/:/home/aj/.bin:/home/aj/.config/hypr/scripts:$PATH"
 PATH="${PATH}:/opt/android-sdk/platform-tools"
 PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"
 PATH="/home/aj/.bun/bin:$PATH"
+PATH="/home/aj/.local/share/JetBrains/Toolbox/scripts:$PATH"
+PATH="/home/aj/.local/share/gem/ruby/3.4.0/bin:$PATH"
+PATH="/home/aj/.deno/bin:$PATH"
+
+# bun completions
+[ -s "/home/aj/.bun/_bun" ] && source "/home/aj/.bun/_bun"
+[ -s "/home/aj/.deno/env" ] && source "/home/aj/.deno/env"
 
 # pnpm
 export PNPM_HOME="/home/aj/.local/share/pnpm"
@@ -166,8 +184,3 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
-
-. "/home/aj/.deno/env"
-
-# bun completions
-[ -s "/home/aj/.bun/_bun" ] && source "/home/aj/.bun/_bun"
