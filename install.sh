@@ -173,7 +173,7 @@ case $SKIP_MISCCONF in
     for i in $(find .config/ -mindepth 1 -maxdepth 1 -exec basename {} \;); do
 #      i=".config/$i"
       echo "[$0]: Found target: .config/$i"
-      v rm -rf "$XDG_CACHE_HOME/$i"
+      v rm -rf "$XDG_CONFIG_HOME/$i"
       v ln -sf "$(pwd)/.config/$i" "$XDG_CONFIG_HOME/$i"
     done
     ;;
