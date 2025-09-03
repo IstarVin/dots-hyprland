@@ -28,6 +28,30 @@ Item {
     property real workspaceIconMarginShrinked: -4
     property int workspaceIndexInGroup: (monitor?.activeWorkspace?.id - 1) % Config.options.bar.workspaces.shown
 
+    property bool showNumbers: false
+    Timer {
+        id: showNumbersTimer
+        interval: (Config?.options.bar.autoHide.showWhenPressingSuper.delay ?? 100)
+        repeat: false
+        onTriggered: {
+            root.showNumbers = true
+        }
+    }
+    Connections {
+        target: GlobalStates
+        function onSuperDownChanged() {
+            if (!Config?.options.bar.autoHide.showWhenPressingSuper.enable) return;
+            if (GlobalStates.superDown) showNumbersTimer.restart();
+            else {
+                showNumbersTimer.stop();
+                root.showNumbers = false;
+            }
+        }
+        function onSuperReleaseMightTriggerChanged() { 
+            showNumbersTimer.stop()
+        }
+    }
+
     // Function to update workspaceOccupied
     function updateWorkspaceOccupied() {
         workspaceOccupied = Array.from({ length: Config.options.bar.workspaces.shown }, (_, i) => {
@@ -35,15 +59,22 @@ Item {
         })
     }
 
-    // Initialize workspaceOccupied when the component is created
+    // Occupied workspace updates
     Component.onCompleted: updateWorkspaceOccupied()
-
-    // Listen for changes in Hyprland.workspaces.values
     Connections {
         target: Hyprland.workspaces
         function onValuesChanged() {
             updateWorkspaceOccupied();
         }
+    }
+    Connections {
+        target: Hyprland
+        function onFocusedWorkspaceChanged() {
+            updateWorkspaceOccupied();
+        }
+    }
+    onWorkspaceGroupChanged: {
+        updateWorkspaceOccupied();
     }
 
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
@@ -86,11 +117,11 @@ Item {
                 z: 1
                 implicitWidth: workspaceButtonWidth
                 implicitHeight: workspaceButtonWidth
-                radius: Appearance.rounding.full
-                property var leftOccupied: (workspaceOccupied[index-1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index))
+                radius: (width / 2)
+                property var previousOccupied: (workspaceOccupied[index-1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index))
                 property var rightOccupied: (workspaceOccupied[index+1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index+2))
-                property var radiusLeft: leftOccupied ? 0 : Appearance.rounding.full
-                property var radiusRight: rightOccupied ? 0 : Appearance.rounding.full
+                property var radiusLeft: previousOccupied ? 0 : (width / 2)
+                property var radiusRight: rightOccupied ? 0 : (width / 2)
 
                 topLeftRadius: radiusLeft
                 bottomLeftRadius: radiusLeft
@@ -176,17 +207,20 @@ Item {
                     property var mainAppIconSource: Quickshell.iconPath(AppSearch.guessIcon(biggestWindow?.class), "image-missing")
 
                     StyledText { // Workspace number text
-                        opacity: GlobalStates.workspaceShowNumbers
-                            || ((Config.options?.bar.workspaces.alwaysShowNumbers && (!Config.options?.bar.workspaces.showAppIcons || !workspaceButtonBackground.biggestWindow || GlobalStates.workspaceShowNumbers))
-                            || (GlobalStates.workspaceShowNumbers && !Config.options?.bar.workspaces.showAppIcons)
+                        opacity: root.showNumbers
+                            || ((Config.options?.bar.workspaces.alwaysShowNumbers && (!Config.options?.bar.workspaces.showAppIcons || !workspaceButtonBackground.biggestWindow || root.showNumbers))
+                            || (root.showNumbers && !Config.options?.bar.workspaces.showAppIcons)
                             )  ? 1 : 0
                         z: 3
 
                         anchors.centerIn: parent
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        font.pixelSize: Appearance.font.pixelSize.small - ((text.length - 1) * (text !== "10") * 2)
-                        text: `${button.workspaceValue}`
+                        font {
+                            pixelSize: Appearance.font.pixelSize.small - ((text.length - 1) * (text !== "10") * 2)
+                            family: Config.options?.bar.workspaces.useNerdFont ? Appearance.font.family.iconNerd : Appearance.font.family.main
+                        }
+                        text: Config.options?.bar.workspaces.numberMap[button.workspaceValue - 1] || button.workspaceValue
                         elide: Text.ElideRight
                         color: (monitor?.activeWorkspace?.id == button.workspaceValue) ? 
                             Appearance.m3colors.m3onPrimary : 
@@ -200,7 +234,7 @@ Item {
                     Rectangle { // Dot instead of ws number
                         id: wsDot
                         opacity: (Config.options?.bar.workspaces.alwaysShowNumbers
-                            || GlobalStates.workspaceShowNumbers
+                            || root.showNumbers
                             || (Config.options?.bar.workspaces.showAppIcons && workspaceButtonBackground.biggestWindow)
                             ) ? 0 : 1
                         visible: opacity > 0
@@ -222,20 +256,20 @@ Item {
                         width: workspaceButtonWidth
                         height: workspaceButtonWidth
                         opacity: !Config.options?.bar.workspaces.showAppIcons ? 0 :
-                            (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
+                            (workspaceButtonBackground.biggestWindow && !root.showNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
                             1 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
                             visible: opacity > 0
                         IconImage {
                             id: mainAppIcon
                             anchors.bottom: parent.bottom
                             anchors.right: parent.right
-                            anchors.bottomMargin: (!GlobalStates.workspaceShowNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
+                            anchors.bottomMargin: (!root.showNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
                                 (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
-                            anchors.rightMargin: (!GlobalStates.workspaceShowNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
+                            anchors.rightMargin: (!root.showNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
                                 (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
 
                             source: workspaceButtonBackground.mainAppIconSource
-                            implicitSize: (!GlobalStates.workspaceShowNumbers && Config.options?.bar.workspaces.showAppIcons) ? workspaceIconSize : workspaceIconSizeShrinked
+                            implicitSize: (!root.showNumbers && Config.options?.bar.workspaces.showAppIcons) ? workspaceIconSize : workspaceIconSizeShrinked
 
                             Behavior on opacity {
                                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
