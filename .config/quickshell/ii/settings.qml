@@ -29,6 +29,12 @@ ApplicationWindow {
             component: "modules/settings/QuickConfig.qml"
         },
         {
+            name: Translation.tr("General"),
+            icon: "browse",
+            iconRotation: 180,
+            component: "modules/settings/GeneralConfig.qml"
+        },
+        {
             name: Translation.tr("Bar"),
             icon: "toast",
             iconRotation: 180,
@@ -36,7 +42,7 @@ ApplicationWindow {
         },
         {
             name: Translation.tr("Interface"),
-            icon: "cards",
+            icon: "bottom_app_bar",
             component: "modules/settings/InterfaceConfig.qml"
         },
         {
@@ -171,7 +177,7 @@ ApplicationWindow {
                         }
 
                         StyledToolTip {
-                            content: Translation.tr("Open the shell config file.\nIf the button doesn't work or doesn't open in your favorite editor,\nyou can manually open ~/.config/illogical-impulse/config.json")
+                            text: Translation.tr("Open the shell config file.\nIf the button doesn't work or doesn't open in your favorite editor,\nyou can manually open ~/.config/illogical-impulse/config.json")
                         }
                     }
 
@@ -211,7 +217,9 @@ ApplicationWindow {
                     opacity: 1.0
 
                     active: Config.ready
-                    source: root.pages[0].component
+                    Component.onCompleted: {
+                        source = root.pages[0].component
+                    }
 
                     Connections {
                         target: root
