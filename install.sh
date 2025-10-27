@@ -5,6 +5,7 @@ source ./scriptdata/environment-variables
 source ./scriptdata/functions
 source ./scriptdata/installers
 source ./scriptdata/options
+source ./scriptdata/custom
 
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1; then

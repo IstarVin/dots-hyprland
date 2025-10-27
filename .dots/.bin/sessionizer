@@ -31,7 +31,7 @@ if [[ $selected == "create-new" ]]; then
 fi
 
 if [[ $useCode -eq 1 ]]; then
-    code "$selected"
+    code "$selected" 2>/dev/null
     exit 0
 fi
 
