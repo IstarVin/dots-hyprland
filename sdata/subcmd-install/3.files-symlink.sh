@@ -4,27 +4,36 @@
 
 # shellcheck shell=bash
 
+# Backup directory for replaced files/directories
+SYMLINK_BACKUP_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/.ii-install-backups"
+
 function symlink_dir_s_t(){
   local s=$1
   local t=$2
 
+  # If target is already a symlink, update it without backing up
   if [ -L "$t" ]; then
-    echo -e "${STY_BLUE}[$0]: \"$t\" is already a symlink.${STY_RST}"
+    echo -e "${STY_BLUE}[$0]: \"$t\" is already a symlink (no backup needed).${STY_RST}"
     local current_target=$(readlink "$t")
     if [ "$current_target" = "$s" ]; then
       echo -e "${STY_GREEN}[$0]: Symlink already points to correct location.${STY_RST}"
     else
-      echo -e "${STY_YELLOW}[$0]: Symlink points to different location: $current_target${STY_RST}"
+      echo -e "${STY_YELLOW}[$0]: Updating symlink from $current_target to $s${STY_RST}"
       v rm "$t"
       v ln -sf "$s" "$t"
     fi
+  # Only backup if it's a real directory (not a symlink)
   elif [ -d "$t" ]; then
     echo -e "${STY_YELLOW}[$0]: \"$t\" exists as a directory. Backing up and creating symlink.${STY_RST}"
-    v mv "$t" "$t.backup-$(date +%Y%m%d-%H%M%S)"
+    v mkdir -p "$SYMLINK_BACKUP_DIR"
+    local backup_name="$(basename "$t").backup-$(date +%Y%m%d-%H%M%S)"
+    v mv "$t" "$SYMLINK_BACKUP_DIR/$backup_name"
     v ln -sf "$s" "$t"
   elif [ -e "$t" ]; then
     echo -e "${STY_YELLOW}[$0]: \"$t\" exists as a file. Backing up and creating symlink.${STY_RST}"
-    v mv "$t" "$t.backup-$(date +%Y%m%d-%H%M%S)"
+    v mkdir -p "$SYMLINK_BACKUP_DIR"
+    local backup_name="$(basename "$t").backup-$(date +%Y%m%d-%H%M%S)"
+    v mv "$t" "$SYMLINK_BACKUP_DIR/$backup_name"
     v ln -sf "$s" "$t"
   else
     echo -e "${STY_GREEN}[$0]: Creating new symlink: $t -> $s${STY_RST}"
@@ -37,19 +46,23 @@ function symlink_file_s_t(){
   local s=$1
   local t=$2
 
+  # If target is already a symlink, update it without backing up
   if [ -L "$t" ]; then
-    echo -e "${STY_BLUE}[$0]: \"$t\" is already a symlink.${STY_RST}"
+    echo -e "${STY_BLUE}[$0]: \"$t\" is already a symlink (no backup needed).${STY_RST}"
     local current_target=$(readlink "$t")
     if [ "$current_target" = "$s" ]; then
       echo -e "${STY_GREEN}[$0]: Symlink already points to correct location.${STY_RST}"
     else
-      echo -e "${STY_YELLOW}[$0]: Symlink points to different location: $current_target${STY_RST}"
+      echo -e "${STY_YELLOW}[$0]: Updating symlink from $current_target to $s${STY_RST}"
       v rm "$t"
       v ln -sf "$s" "$t"
     fi
+  # Only backup if it's a real file (not a symlink)
   elif [ -e "$t" ]; then
     echo -e "${STY_YELLOW}[$0]: \"$t\" exists. Backing up and creating symlink.${STY_RST}"
-    v mv "$t" "$t.backup-$(date +%Y%m%d-%H%M%S)"
+    v mkdir -p "$SYMLINK_BACKUP_DIR"
+    local backup_name="$(basename "$t").backup-$(date +%Y%m%d-%H%M%S)"
+    v mv "$t" "$SYMLINK_BACKUP_DIR/$backup_name"
     v ln -sf "$s" "$t"
   else
     echo -e "${STY_GREEN}[$0]: Creating new symlink: $t -> $s${STY_RST}"
@@ -64,7 +77,7 @@ v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME/icons
 
 echo -e "${STY_CYAN}[$0]: Using SYMLINK mode - files will be symlinked instead of copied${STY_RST}"
 
-# MISC (For dots/.config/* but not quickshell, not fish, not Hyprland, not fontconfig)
+# MISC (For dots/.config/* but not quickshell, not fish, not hypr, not fontconfig)
 case "${SKIP_MISCCONF}" in
   true) sleep 0;;
   *)
@@ -105,52 +118,11 @@ case "${SKIP_FONTCONFIG}" in
     ;;
 esac
 
-# For Hyprland - special handling since we need to symlink subdirectories
+# For Hyprland - symlink entire directory
 case "${SKIP_HYPRLAND}" in
   true) sleep 0;;
   *)
-    if ! [ -d "$XDG_CONFIG_HOME/hypr" ]; then v mkdir -p "$XDG_CONFIG_HOME/hypr"; fi
-
-    # Symlink the hyprland subdirectory
-    symlink_dir_s_t "$(pwd)/dots/.config/hypr/hyprland" "$XDG_CONFIG_HOME/hypr/hyprland"
-
-    # For main config files, create copies (not symlinks) on first run
-    # This allows user customization while keeping modular configs synced
-    for i in hypr{land,lock}.conf {monitors,workspaces}.conf; do
-      if [ ! -e "$XDG_CONFIG_HOME/hypr/$i" ]; then
-        echo -e "${STY_GREEN}[$0]: Creating initial copy of $i (customizable)${STY_RST}"
-        v cp "dots/.config/hypr/$i" "$XDG_CONFIG_HOME/hypr/$i"
-      else
-        echo -e "${STY_BLUE}[$0]: $i already exists, not overwriting${STY_RST}"
-      fi
-    done
-
-    for i in hypridle.conf; do
-      if [ ! -e "$XDG_CONFIG_HOME/hypr/$i" ]; then
-        if [[ "${INSTALL_VIA_NIX}" == true ]]; then
-          v cp "dots-extra/via-nix/$i" "$XDG_CONFIG_HOME/hypr/$i"
-        else
-          v cp "dots/.config/hypr/$i" "$XDG_CONFIG_HOME/hypr/$i"
-        fi
-      fi
-    done
-
-    if [ "$OS_GROUP_ID" = "fedora" ]; then
-      if ! grep -q "polkit-kde-authentication-agent-1" "${XDG_CONFIG_HOME}/hypr/hyprland/execs.conf" 2>/dev/null; then
-        v bash -c "printf \"# For fedora to setup polkit\nexec-once = /usr/libexec/kf6/polkit-kde-authentication-agent-1\n\" >> ${XDG_CONFIG_HOME}/hypr/hyprland/execs.conf"
-      fi
-    fi
-
-    # Create custom directory if it doesn't exist (this is for user customizations)
-    if [ ! -d "$XDG_CONFIG_HOME/hypr/custom" ]; then
-      v mkdir -p "$XDG_CONFIG_HOME/hypr/custom"
-      # Copy template files
-      for f in dots/.config/hypr/custom/*; do
-        if [ -f "$f" ]; then
-          v cp "$f" "$XDG_CONFIG_HOME/hypr/custom/$(basename "$f")"
-        fi
-      done
-    fi
+    symlink_dir_s_t "$(pwd)/dots/.config/hypr" "$XDG_CONFIG_HOME/hypr"
     ;;
 esac
 
@@ -173,5 +145,8 @@ fi
 v touch "${FIRSTRUN_FILE}"
 
 echo -e "${STY_GREEN}[$0]: Symlink setup complete!${STY_RST}"
-echo -e "${STY_CYAN}Note: Most directories are now symlinked to the repo.${STY_RST}"
+echo -e "${STY_CYAN}Note: All config directories are now symlinked to the repo.${STY_RST}"
 echo -e "${STY_CYAN}Changes in the repo will immediately affect your config, and vice versa.${STY_RST}"
+if [ -d "$SYMLINK_BACKUP_DIR" ]; then
+  echo -e "${STY_YELLOW}Backups of replaced files are in: $SYMLINK_BACKUP_DIR${STY_RST}"
+fi
