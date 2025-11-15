@@ -5,7 +5,7 @@
 # shellcheck shell=bash
 
 # Backup directory for replaced files/directories
-SYMLINK_BACKUP_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/.ii-install-backups"
+SYMLINK_BACKUP_DIR="${XDG_CONFIG_HOME:-$HOME}/.ii-install-backups"
 
 function symlink_dir_s_t(){
   local s=$1

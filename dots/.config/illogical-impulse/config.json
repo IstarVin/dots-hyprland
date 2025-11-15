@@ -95,6 +95,7 @@
                 },
                 "showOnlyWhenLocked": false,
                 "style": "cookie",
+                "styleLocked": "cookie",
                 "x": 100,
                 "y": 100
             },
@@ -135,6 +136,9 @@
         "screenList": [
         ],
         "showBackground": true,
+        "tooltips": {
+            "clickToShow": false
+        },
         "topLeftIcon": "spark",
         "tray": {
             "filterPassive": true,
@@ -145,13 +149,13 @@
             "showItemId": false
         },
         "utilButtons": {
-            "showColorPicker": false,
-            "showDarkModeToggle": true,
-            "showKeyboardToggle": true,
+            "showColorPicker": true,
+            "showDarkModeToggle": false,
+            "showKeyboardToggle": false,
             "showMicToggle": false,
-            "showPerformanceProfileToggle": false,
+            "showPerformanceProfileToggle": true,
             "showScreenRecord": false,
-            "showScreenSnip": true
+            "showScreenSnip": false
         },
         "verbose": true,
         "vertical": false,
@@ -424,16 +428,16 @@
                         "type": "idleInhibitor"
                     },
                     {
-                        "size": 1,
-                        "type": "mic"
-                    },
-                    {
                         "size": 2,
                         "type": "audio"
                     },
                     {
                         "size": 2,
                         "type": "nightLight"
+                    },
+                    {
+                        "size": 1,
+                        "type": "cloudflareWarp"
                     }
                 ]
             },
@@ -452,7 +456,7 @@
     "time": {
         "dateFormat": "ddd, dd/MM",
         "dateWithYearFormat": "dd/MM/yyyy",
-        "format": "hh:mm",
+        "format": "h:mm ap",
         "pomodoro": {
             "breakTime": 300,
             "cyclesBeforeLongBreak": 4,
