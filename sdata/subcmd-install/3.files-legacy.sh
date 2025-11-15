@@ -122,4 +122,17 @@ declare -a arg_excludes=()
 # v rsync -av "dots/.local/bin/" "$XDG_BIN_HOME" # No longer needed since scripts are no longer in ~/.local/bin
 v cp -f "dots/.local/share/icons/illogical-impulse.svg" "${XDG_DATA_HOME}"/icons/illogical-impulse.svg
 
+# Copy files from dots/.home to home directory
+if [ -d "dots/.home" ]; then
+  echo "[$0]: Copying home directory dotfiles from dots/.home/"
+  for i in $(find dots/.home/ -mindepth 1 -maxdepth 1 ! -name 'README.md' -exec basename {} \;); do
+    echo "[$0]: Found home dotfile: $i"
+    if [ -d "dots/.home/$i" ]; then
+      warning_rsync_normal; v rsync -av "dots/.home/$i/" "$HOME/$i/"
+    elif [ -f "dots/.home/$i" ]; then
+      warning_rsync_normal; v rsync -av "dots/.home/$i" "$HOME/$i"
+    fi
+  done
+fi
+
 v touch "${FIRSTRUN_FILE}"

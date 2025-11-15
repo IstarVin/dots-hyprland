@@ -27,8 +27,9 @@ Options for install:
       --core                Alias of --skip-{plasmaintg,fish,miscconf,fontconfig}
       --fontset <set>       Use a set of pre-defined font and config (currently only fontconfig).
                             Possible values of <set>: $(ls -A ${REPO_ROOT}/dots-extra/fontsets)
-      --symlink             Use symlinks instead of copying files (for development).
+      --symlink             Use symlinks instead of copying files (DEFAULT).
                             Config changes will sync bidirectionally with the repo.
+      --no-symlink          Use copying instead of symlinks (for non-development use).
 ${STY_CYAN}
 New features (experimental):
       --exp-files             Use yaml-based config for the third step copying files.
@@ -45,10 +46,13 @@ cleancache(){
   rm -rf "${REPO_ROOT}/cache"
 }
 
+# Set default to use symlinks
+USE_SYMLINKS=true
+
 # `man getopt` to see more
 para=$(getopt \
   -o hfFk:cs \
-  -l help,force,firstrun,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,ignore-outdate,skip-sysupdate,skip-plasmaintg,skip-backup,skip-quickshell,skip-fish,skip-hyprland,skip-fontconfig,skip-miscconf,core,exp-files,via-nix,symlink \
+  -l help,force,firstrun,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,ignore-outdate,skip-sysupdate,skip-plasmaintg,skip-backup,skip-quickshell,skip-fish,skip-hyprland,skip-fontconfig,skip-miscconf,core,exp-files,via-nix,symlink,no-symlink \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -91,6 +95,7 @@ while true ; do
     --exp-files) EXPERIMENTAL_FILES_SCRIPT=true;shift;;
     --via-nix) INSTALL_VIA_NIX=true;shift;;
     --symlink) USE_SYMLINKS=true;shift;;
+    --no-symlink) USE_SYMLINKS=false;shift;;
 
     ## Ones with parameter
     --fontset)

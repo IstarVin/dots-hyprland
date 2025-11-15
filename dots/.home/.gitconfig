@@ -1,0 +1,16 @@
+[user]
+	email = ajdeleverio20@gmail.com
+	name = IstarVin
+[url "https://github.com/"]
+	insteadOf = gh:
+[pull]
+	rebase = false
+[init]
+	defaultBranch = main
+[push]
+	autoSetupRemote = true
+	default = current
+[alias]
+	undo = reset --soft HEAD^
+[color]
+	ui = auto

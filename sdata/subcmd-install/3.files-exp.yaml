@@ -65,6 +65,11 @@ patterns:
   - from: "dots/.local/share/konsole"
     to: "$XDG_DATA_HOME/konsole"
     mode: "soft"
+  # Home directory dotfiles
+  - from: "dots/.home"
+    to: "$HOME"
+    mode: "soft"
+    excludes: ["README.md"]
   # Fontconfig (default - fontsets handled separately if FONTSET_DIR_NAME is set)
   - from: "dots/.config/fontconfig"
     to: "$XDG_CONFIG_HOME/fontconfig"

@@ -157,6 +157,19 @@ esac
 # Icon file - copy instead of symlink (small file)
 v cp -f "dots/.local/share/icons/illogical-impulse.svg" "${XDG_DATA_HOME}/icons/illogical-impulse.svg"
 
+# Symlink files from dots/.home to home directory
+if [ -d "dots/.home" ]; then
+  echo "[$0]: Symlinking home directory dotfiles from dots/.home/"
+  for i in $(find dots/.home/ -mindepth 1 -maxdepth 1 ! -name 'README.md' -exec basename {} \;); do
+    echo "[$0]: Found home dotfile: $i"
+    if [ -d "dots/.home/$i" ]; then
+      symlink_dir_s_t "$(pwd)/dots/.home/$i" "$HOME/$i"
+    elif [ -f "dots/.home/$i" ]; then
+      symlink_file_s_t "$(pwd)/dots/.home/$i" "$HOME/$i"
+    fi
+  done
+fi
+
 v touch "${FIRSTRUN_FILE}"
 
 echo -e "${STY_GREEN}[$0]: Symlink setup complete!${STY_RST}"
