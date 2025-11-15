@@ -1,0 +1,6 @@
+*
+!.gitignore
+!snippets
+!keybindings.json
+!tasks.json
+!settings.json

@@ -52,9 +52,14 @@ v auto_update_git_submodule
 # Backup
 if [[ ! "${SKIP_BACKUP}" == true ]]; then auto_backup_configs; fi
 
-case "${EXPERIMENTAL_FILES_SCRIPT}" in
-  true)source sdata/subcmd-install/3.files-exp.sh;;
-  *)source sdata/subcmd-install/3.files-legacy.sh;;
+case "${USE_SYMLINKS}" in
+  true)source sdata/subcmd-install/3.files-symlink.sh;;
+  *)
+    case "${EXPERIMENTAL_FILES_SCRIPT}" in
+      true)source sdata/subcmd-install/3.files-exp.sh;;
+      *)source sdata/subcmd-install/3.files-legacy.sh;;
+    esac
+    ;;
 esac
 
 # Prevent hyprland from not fully loaded
