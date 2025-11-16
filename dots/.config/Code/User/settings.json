@@ -171,5 +171,7 @@
   "git.confirmSync": false,
   "hediet.vscode-drawio.resizeImages": null
 ,
-  "material-code.primaryColor": "#1C39AD"
+  "material-code.primaryColor": "#1C39AD",
+  "hediet.vscode-drawio.theme": "kennedy",
+  "hediet.vscode-drawio.appearance": "light"
 }

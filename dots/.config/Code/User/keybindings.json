@@ -482,13 +482,13 @@
     "key": "ctrl-n",
     "command": "cursorDown",
     "when": "terminalFocus"
-  },
-  {
+},
+{
     "key": "shift+enter",
     "command": "workbench.action.terminal.sendSequence",
     "args": {
-      "text": "\u001b\r"
+        "text": "\u001b\r"
     },
     "when": "terminalFocus"
-  }
+}
 ]
