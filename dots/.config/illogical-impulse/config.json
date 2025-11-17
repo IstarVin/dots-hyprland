@@ -47,6 +47,7 @@
         "networkEthernet": "kcmshell6 kcm_networkmanagement",
         "taskManager": "plasma-systemmonitor --page-name Processes",
         "terminal": "kitty -1",
+        "update": "kitty -1 --hold=yes fish -i -c 'sudo pacman -Syu'",
         "volumeMixer": "~/.config/hypr/hyprland/scripts/launch_first_available.sh \"pavucontrol-qt\" \"pavucontrol\""
     },
     "audio": {
@@ -400,7 +401,7 @@
             "clicklessCornerVerticalOffset": 1,
             "cornerRegionHeight": 5,
             "cornerRegionWidth": 250,
-            "enable": true,
+            "enable": false,
             "valueScroll": true,
             "visualize": false
         },
@@ -466,11 +467,17 @@
         "secondPrecision": false,
         "shortDateFormat": "dd/MM"
     },
+    "updates": {
+        "adviseUpdateThreshold": 75,
+        "checkInterval": 120,
+        "stronglyAdviseUpdateThreshold": 200
+    },
     "waffles": {
         "bar": {
             "bottom": true,
             "leftAlignApps": false
-        }
+        },
+        "smootherAnimations": true
     },
     "wallpaperSelector": {
         "useSystemFileDialog": false
