@@ -34,7 +34,39 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "catppuccin-icons.hidesExplorerArrows": true,
+  "chat.agent.maxRequests": 100,
   "chat.mcp.autostart": "newAndOutdated",
+  "chat.tools.terminal.autoApprove": {
+    "/^pnpm check$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^npx tsx scripts/generate-sitios-from-csv\\.ts$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "sed": true,
+    "/^pnpm check 2>&1 \\| head -100$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^pnpm check 2>&1 \\| head -60$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^pnpm check 2>&1 \\| head -50$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^pnpm check 2>&1$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^pnpm check 2>&1 \\| head -80$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  },
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always",
     "source.sortImports": "always"
@@ -89,6 +121,7 @@
     ".env*": "dotenv",
     "*.css": "tailwindcss"
   },
+  "geminicodeassist.project": "serene-coral-jjcf0",
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
   "git.openRepositoryInParentFolders": "never",
@@ -102,9 +135,11 @@
   "github.copilot.nextEditSuggestions.enabled": true,
   "go.toolsManagement.autoUpdate": true,
   "hediet.vscode-drawio.appearance": "light",
+  "hediet.vscode-drawio.codeLinkActivated": false,
   "hediet.vscode-drawio.resizeImages": null,
   "hediet.vscode-drawio.theme": "kennedy",
   "javascript.suggest.autoImports": true,
+  "material-code.primaryColor": "#1C39AD",
   "mdb.mcp.server": "prompt",
   "mermaid.vscode.dark": "light",
   "prettier.tabWidth": 2,
