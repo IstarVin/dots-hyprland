@@ -65,6 +65,10 @@
     "/^pnpm check 2>&1 \\| head -80$/": {
       "approve": true,
       "matchCommandLine": true
+    },
+    "/^pnpm check 2>&1 \\| head -20$/": {
+      "approve": true,
+      "matchCommandLine": true
     }
   },
   "editor.codeActionsOnSave": {
@@ -85,7 +89,7 @@
   "editor.guides.bracketPairs": "active",
   "editor.guides.indentation": true,
   "editor.hideCursorInOverviewRuler": true,
-  "editor.hover.enabled": true,
+  "editor.hover.enabled": "on",
   "editor.insertSpaces": true,
   "editor.language.colorizedBracketPairs": [
     ["<", "/>"],
@@ -206,5 +210,6 @@
   "zenMode.fullScreen": false,
   "zenMode.hideLineNumbers": false,
   "zenMode.hideStatusBar": true,
-  "zenMode.showTabs": "none"
+  "zenMode.showTabs": "none",
+  "chat.mcp.gallery.enabled": true
 }

@@ -143,12 +143,16 @@ alias nvrun='switcherooctl launch -g 1'
 
 alias source-funcs='source <(curl -s https://arch-install.pages.dev/other/functions.sh)'
 
-alias kali='distrobox enter kali'
+# ctf
+alias kali='ssh aj@172.21.0.2'
 alias factordb='uv --directory /mnt/AJ/Projects/factordb run /mnt/AJ/Projects/factordb/factordb.py'
+alias rsactftool='uv --directory=/home/aj/AJ/Projects/ctf/tools/RsaCtfTool run RsaCtfTool'
 alias pcrt='python2 /mnt/AJ/Projects/ctf/PCRT/PCRT.py'
 alias grepico='grep -o "picoCTF{.*}"'
 alias copy='wl-copy'
 alias grepicopy='grepico|copy'
+
+alias android-builder='docker start android-builder && docker exec -it android-builder /bin/zsh'
 
 # Shell integrations
 eval "$(fzf --zsh)"

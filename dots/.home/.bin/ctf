@@ -4,17 +4,35 @@
 # Usage: ctf <command>
 # Commands: init, solved
 
-# Prevent writing to the history file
-HISTFILE="$HOME/.zsh_history"
-
-#setopt NO_APPEND_HISTORY
-#setopt NO_INC_APPEND_HISTORY
-#setopt NO_SHARE_HISTORY
-
-alias py='python3'
-
 # Load history into this shell process
+HISTFILE="$HOME/.zsh_history"
 fc -R "$HISTFILE"
+
+# Get flag prefix based on current directory path
+get_flag_prefix() {
+    local path="$(pwd)"
+    case "$path" in
+        *picoctf*|*picoCTF*)
+            echo "picoCTF"
+            ;;
+        *htb*|*hackthebox*)
+            echo "HTB"
+            ;;
+        *ctflearn*)
+            echo "flag"
+            ;;
+        *tryhackme*|*thm*)
+            echo "THM"
+            ;;
+        *ctftime*)
+            echo "FLAG"
+            ;;
+        *)
+            # No match - return empty
+            echo ""
+            ;;
+    esac
+}
 
 # Function to get current history count
 get_history_count() {
@@ -49,93 +67,124 @@ init_challenge() {
     echo "🚀 CTF Challenge initialized"
     echo "🔗 History anchor set at: $current_count"
     echo "Run 'ctf solved' when you complete the challenge!"
-
-    echo "$(pwd)" > /tmp/ctf_dir
 }
 
 # Mark challenge as solved
 solve_challenge() {
-    # Find the last "ctf init" command
-    #local start_count=$(find_last_init)
-    
     local solvedTxt="$(pwd)/solved.txt" 
     
+    # Fast path: if solved.txt exists, use it
     if [[ -f $solvedTxt ]]; then
-    	echo "🎉 Challenge solved!"
-    	flag=$(cat $solvedTxt)
+        echo "🎉 Challenge solved!"
+        flag=$(cat $solvedTxt)
         echo "🏁 Flag: $flag"
-	echo $flag | wl-copy
-    	mark_as_solved "$(pwd)"
-    	return 0
+        if command -v wl-copy &> /dev/null; then
+            echo $flag | wl-copy
+        else
+            echo "⚠️  wl-copy not found, flag not copied to clipboard"
+        fi
+        mark_as_solved "$(pwd)"
+        return 0
     fi
 
-    #if [[ -z "$start_count" ]]; then
-    #    echo "❌ No 'ctf init' found in history. Run 'ctf init' first."
-    #    return 1
-    #fi
+    # Find the last "ctf init" command
+    local start_count=$(find_last_init)
+    
+    if [[ -z "$start_count" ]]; then
+        echo "⚠️  No 'ctf init' found in history. Commands won't be saved to solved.sh"
+    fi
 
     # Get current history count
     local end_count=$(get_history_count)
 
     echo "🎉 Challenge solved!"
-    #echo "📝 Extracting commands from $start_count to $end_count..."
 
     # Create solved.sh file in current directory
     local solved_file="./solved.sh"
 
-    # Extract and save commands
-    #extract_commands "$((start_count + 1))" "$end_count" > "$solved_file"
+    # Extract and save commands if we found init
+    if [[ -n "$start_count" ]]; then
+        extract_commands "$((start_count + 1))" "$end_count" > "$solved_file"
+        chmod +x "$solved_file"
+        echo "✅ Commands saved to: $solved_file"
+    fi
 
-    # if [[ $? -eq 0 ]]; then
-    #     chmod +x "$solved_file"
-    #     echo "✅ Commands saved to: $solved_file"
-
-    #     # Get the last command (the one before "ctf solved")
-    #     local last_cmd=$(history | awk -v num="$((end_count - 1))" '$1 == num {$1 = ""; sub(/^ +/, ""); print $0}')
-    #     if [[ -n "$last_cmd" && "$last_cmd" != "ctf solved" ]]; then
-    #         echo "🔄 Last command: $last_cmd"
-	#     flag=$(eval $last_cmd)
-	#     echo "🏁 Flag: $flag"
-	#     echo $flag | wl-copy
-	#     mark_as_solved "$(cat /tmp/ctf_dir)"
-    #     fi
-
-    # else
-    #     echo "❌ Error extracting commands from history"
-    #     return 1
-    # fi
-
+    # Get the last command (the one before "ctf solved")
     local last_cmd=$(history | awk -v num="$((end_count - 1))" '$1 == num {$1 = ""; sub(/^ +/, ""); print $0}')
-    local flag=$(eval $last_cmd)
-
-    echo "$last_cmd" > "$solved_file"
-    chmod +x "$solved_file"
-    echo "$last_cmd" > "$solved_file"
-
-    echo $flag | wl-copy
-    echo "🏁 Flag: $flag"
-
-    mark_as_solved "$(pwd)"
-
-    echo "✨ Challenge completed!"
+    
+    if [[ -n "$last_cmd" && "$last_cmd" != "ctf solved" ]]; then
+        echo "🔄 Last command: $last_cmd"
+        local flag=$(eval $last_cmd 2>&1)
+        
+        # If flag is empty or looks like an error, try auto-grep
+        if [[ -z "$flag" || "$flag" == *"command not found"* || "$flag" == *"error"* ]]; then
+            local prefix=$(get_flag_prefix)
+            if [[ -n "$prefix" ]]; then
+                echo "🔍 Auto-detecting flag with prefix: $prefix"
+                flag=$(echo "$flag" | grep -io "${prefix}{.*}" | head -1)
+            fi
+        fi
+        
+        if [[ -n "$flag" ]]; then
+            echo "🏁 Flag: $flag"
+            if command -v wl-copy &> /dev/null; then
+                echo $flag | wl-copy
+            else
+                echo "⚠️  wl-copy not found, flag not copied to clipboard"
+            fi
+            mark_as_solved "$(pwd)"
+            echo "✨ Challenge completed!"
+        else
+            echo "❌ Could not extract flag. Use 'ctf flag <flag>' to set it manually."
+            return 1
+        fi
+    else
+        echo "❌ No valid command found in history."
+        return 1
+    fi
 }
 
 mark_as_solved() {
-    folder="$1"
-    mv "$folder" "$folder (SOLVED)"
+    local folder="$1"
+    if [[ "$folder" == *"(SOLVED)"* ]]; then
+        echo "⚠️  Folder already marked as solved"
+        return 0
+    fi
+    if mv "$folder" "$folder (SOLVED)" 2>/dev/null; then
+        return 0
+    else
+        echo "⚠️  Could not rename folder to mark as solved"
+        return 1
+    fi
 }
 
 grep_flag() {
-    prefix=$1
+    local prefix=$1
+    if [[ -z "$prefix" ]]; then
+        prefix=$(get_flag_prefix)
+        if [[ -z "$prefix" ]]; then
+            echo "❌ No prefix provided and could not auto-detect from path"
+            echo "Usage: ctf grep <prefix>"
+            return 1
+        fi
+        echo "🔍 Auto-detected prefix: $prefix"
+    fi
     grep -io "${prefix}{.*}"
 }
 
 set_flag() {
     local flag=$1
+    if [[ -z "$flag" ]]; then
+        echo "❌ Usage: ctf flag <flag>"
+        return 1
+    fi
     echo "🏁 Flag: $flag"
     echo "$flag" > solved.txt
-    echo "$flag" | wl-copy
-
+    if command -v wl-copy &> /dev/null; then
+        echo "$flag" | wl-copy
+    else
+        echo "⚠️  wl-copy not found, flag not copied to clipboard"
+    fi
     mark_as_solved "$(pwd)"
 }
 
@@ -154,7 +203,12 @@ case "$1" in
 	set_flag $2
 	;;
     *)
-        echo "❌ Usage: ctf init|solved|grep"
+        echo "❌ Usage: ctf <command>"
+        echo "Commands:"
+        echo "  init              - Initialize a new CTF challenge (starts tracking commands)"
+        echo "  solved            - Mark challenge as solved (extracts flag from last command)"
+        echo "  grep [prefix]     - Search for flag with given prefix (auto-detects if omitted)"
+        echo "  flag <flag>       - Manually set the flag"
         exit 1
         ;;
 esac
