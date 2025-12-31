@@ -154,6 +154,8 @@ alias grepicopy='grepico|copy'
 
 alias android-builder='docker start android-builder && docker exec -it android-builder /bin/zsh'
 
+alias reboot-windows='systemctl reboot --boot-loader-entry=windows.conf'
+
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init zsh)"

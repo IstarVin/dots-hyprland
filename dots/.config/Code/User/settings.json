@@ -69,6 +69,10 @@
     "/^pnpm check 2>&1 \\| head -20$/": {
       "approve": true,
       "matchCommandLine": true
+    },
+    "/^pnpm lint$/": {
+      "approve": true,
+      "matchCommandLine": true
     }
   },
   "editor.codeActionsOnSave": {
