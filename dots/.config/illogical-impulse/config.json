@@ -30,6 +30,7 @@
             "title": "Roboto Flex"
         },
         "palette": {
+            "accentColor": "",
             "type": "scheme-rainbow"
         },
         "transparency": {
@@ -52,6 +53,8 @@
     },
     "apps": {
         "bluetooth": "kcmshell6 kcm_bluetooth",
+        "changePassword": "kitty -1 --hold=yes fish -i -c 'passwd'",
+        "manageUser": "kcmshell6 kcm_users",
         "network": "kitty -1 fish -c nmtui",
         "networkEthernet": "kcmshell6 kcm_networkmanagement",
         "taskManager": "plasma-systemmonitor --page-name Processes",
@@ -95,7 +98,17 @@
                     "useSineCookie": false
                 },
                 "digital": {
-                    "animateChange": true
+                    "adaptiveAlignment": true,
+                    "animateChange": true,
+                    "font": {
+                        "family": "Google Sans Flex",
+                        "roundness": 0,
+                        "size": 90,
+                        "weight": 350,
+                        "width": 100
+                    },
+                    "showDate": true,
+                    "vertical": false
                 },
                 "enable": true,
                 "placementStrategy": "leastBusy",
@@ -223,28 +236,6 @@
         ],
         "pinnedOnStartup": false
     },
-    "enabledPanels": [
-        "iiBar",
-        "iiBackground",
-        "iiCheatsheet",
-        "iiDock",
-        "iiLock",
-        "iiMediaControls",
-        "iiNotificationPopup",
-        "iiOnScreenDisplay",
-        "iiOnScreenKeyboard",
-        "iiOverlay",
-        "iiOverview",
-        "iiPolkit",
-        "iiRegionSelector",
-        "iiReloadPopup",
-        "iiScreenCorners",
-        "iiSessionScreen",
-        "iiSidebarLeft",
-        "iiSidebarRight",
-        "iiVerticalBar",
-        "iiWallpaperSelector"
-    ],
     "hacks": {
         "arbitraryRaceConditionDelay": 20
     },
@@ -266,6 +257,13 @@
             "targetLanguage": "auto"
         },
         "ui": "auto"
+    },
+    "launcher": {
+        "pinnedApps": [
+            "org.kde.dolphin",
+            "kitty",
+            "cmake-gui"
+        ]
     },
     "light": {
         "antiFlashbang": {
@@ -292,7 +290,7 @@
             "unlockKeyring": true
         },
         "showLockedText": true,
-        "useHyprlock": false
+        "useHyprlock": true
     },
     "media": {
         "filterDuplicatePlayers": true
@@ -327,6 +325,8 @@
         "centerIcons": true,
         "columns": 5,
         "enable": true,
+        "orderBottomUp": false,
+        "orderRightLeft": false,
         "rows": 2,
         "scale": 0.18
     },
@@ -336,6 +336,9 @@
         "weeb": 1
     },
     "regionSelector": {
+        "annotation": {
+            "useSatty": false
+        },
         "circle": {
             "padding": 10,
             "strokeWidth": 6
@@ -515,6 +518,7 @@
         },
         "tweaks": {
             "smootherMenuAnimations": true,
+            "smootherSearchBar": true,
             "switchHandlePositionFix": true
         }
     },
