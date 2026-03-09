@@ -1,83 +1,91 @@
 {
   "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
+  "biome.requireConfiguration": true,
   "[dart]": {
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
     "editor.rulers": [80],
     "editor.selectionHighlight": false,
     "editor.tabCompletion": "onlySnippets",
-    "editor.wordBasedSuggestions": "off"
+    "editor.wordBasedSuggestions": "off",
   },
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode",
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "catppuccin-icons.hidesExplorerArrows": true,
   "chat.agent.maxRequests": 100,
+  "chat.tools.terminal.terminalProfile.linux": {
+    "path": "/bin/bash",
+  },
   "chat.mcp.autostart": "newAndOutdated",
   "chat.tools.terminal.autoApprove": {
     "/^pnpm check$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^npx tsx scripts/generate-sitios-from-csv\\.ts$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "sed": true,
     "/^pnpm check 2>&1 \\| head -100$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^pnpm check 2>&1 \\| head -60$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^pnpm check 2>&1 \\| head -50$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^pnpm check 2>&1$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^pnpm check 2>&1 \\| head -80$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^pnpm check 2>&1 \\| head -20$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^pnpm lint$/": {
       "approve": true,
-      "matchCommandLine": true
-    }
+      "matchCommandLine": true,
+    },
+    "/^bun run check$/": {
+      "approve": true,
+      "matchCommandLine": true,
+    },
   },
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always",
-    "source.sortImports": "always"
+    "source.sortImports": "always",
   },
   "editor.cursorBlinking": "phase",
   "editor.cursorSmoothCaretAnimation": "on",
@@ -101,7 +109,7 @@
     ["</", ">"],
     ["{", "}"],
     ["[", "]"],
-    ["(", ")"]
+    ["(", ")"],
   ],
   "editor.lightbulb.enabled": "off",
   "editor.matchBrackets": "near",
@@ -111,7 +119,7 @@
   "editor.quickSuggestions": {
     "comments": false,
     "other": true,
-    "strings": true
+    "strings": true,
   },
   "editor.renderControlCharacters": false,
   "editor.renderLineHighlight": "none",
@@ -127,7 +135,7 @@
   "extensions.ignoreRecommendations": true,
   "files.associations": {
     ".env*": "dotenv",
-    "*.css": "tailwindcss"
+    "*.css": "tailwindcss",
   },
   "geminicodeassist.project": "serene-coral-jjcf0",
   "git.confirmSync": false,
@@ -138,7 +146,7 @@
     "dotenv": false,
     "markdown": false,
     "plaintext": false,
-    "scminput": false
+    "scminput": false,
   },
   "github.copilot.nextEditSuggestions.enabled": true,
   "go.toolsManagement.autoUpdate": true,
@@ -162,22 +170,22 @@
   "terminal.integrated.profiles.linux": {
     "bash": {
       "icon": "terminal-bash",
-      "path": "bash"
+      "path": "bash",
     },
     "fish": {
-      "path": "fish"
+      "path": "fish",
     },
     "pwsh": {
       "icon": "terminal-powershell",
-      "path": "pwsh"
+      "path": "pwsh",
     },
     "tmux": {
       "icon": "terminal-tmux",
-      "path": "tmux"
+      "path": "tmux",
     },
     "zsh": {
-      "path": "/bin/zsh"
-    }
+      "path": "/bin/zsh",
+    },
   },
   "terminal.integrated.shellIntegration.history": 1000,
   "terminal.integrated.smoothScrolling": true,
@@ -189,8 +197,8 @@
     {
       "before": [":"],
       "commands": ["workbench.action.quickOpen"],
-      "silent": true
-    }
+      "silent": true,
+    },
   ],
   "vim.smartRelativeLine": true,
   "vim.useSystemClipboard": true,
@@ -215,5 +223,20 @@
   "zenMode.hideLineNumbers": false,
   "zenMode.hideStatusBar": true,
   "zenMode.showTabs": "none",
-  "chat.mcp.gallery.enabled": true
+  "chat.mcp.gallery.enabled": true,
+  "json.schemaDownload.trustedDomains": {
+    "https://schemastore.azurewebsites.net/": true,
+    "https://raw.githubusercontent.com/": true,
+    "https://www.schemastore.org/": true,
+    "https://json.schemastore.org/": true,
+    "https://json-schema.org/": true,
+    "https://shadcn-svelte.com": true,
+    "https://schema.tauri.app": true,
+    "https://biomejs.dev": true,
+    "https://esm.sh": true,
+    "https://docs.renovatebot.com": true,
+  },
+  "chat.tools.urls.autoApprove": {
+    "https://docs.rs": true,
+  },
 }

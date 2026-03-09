@@ -126,7 +126,7 @@ alias Balanced='asusctl profile -P Balanced'
 alias Performance='asusctl profile -P Performance'
 alias incognito='unset HISTFILE'
 
-alias charge='asusctl -c'
+alias charge='asusctl battery limit'
 alias keyboard_color='asusctl aura static -c 803dba'
 
 alias home-server='ssh home-server'
