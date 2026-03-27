@@ -82,6 +82,11 @@
       "approve": true,
       "matchCommandLine": true,
     },
+    "/^\\./gradlew :app:assembleDebug$/": {
+      "approve": true,
+      "matchCommandLine": true,
+    },
+    "./gradlew": true,
   },
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always",
@@ -154,7 +159,7 @@
   "hediet.vscode-drawio.codeLinkActivated": false,
   "hediet.vscode-drawio.resizeImages": null,
   "hediet.vscode-drawio.theme": "kennedy",
-  "javascript.suggest.autoImports": true,
+  "js/ts.suggest.autoImports": true,
   "material-code.primaryColor": "#1C39AD",
   "mdb.mcp.server": "prompt",
   "mermaid.vscode.dark": "light",
@@ -190,8 +195,8 @@
   "terminal.integrated.shellIntegration.history": 1000,
   "terminal.integrated.smoothScrolling": true,
   "terminal.integrated.stickyScroll.enabled": true,
-  "typescript.preferences.importModuleSpecifier": "shortest",
-  "typescript.updateImportsOnFileMove.enabled": "always",
+  "js/ts.preferences.importModuleSpecifier": "shortest",
+  "js/ts.updateImportsOnFileMove.enabled": "always",
   "vim.cursorStylePerMode.replace": "underline",
   "vim.normalModeKeyBindings": [
     {
