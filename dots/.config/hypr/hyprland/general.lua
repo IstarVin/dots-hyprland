@@ -284,7 +284,7 @@ hl.config({
         allow_session_lock_restore = true,
         session_lock_xray = true,
         initial_workspace_tracking = false,
-        focus_on_activate = true
+        -- focus_on_activate = true
     },
 
     binds = {
