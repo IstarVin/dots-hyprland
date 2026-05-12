@@ -1,17 +1,31 @@
 #!/usr/bin/python3
 
-import os
-import subprocess
-import json
 import argparse
+import json
+import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument("window", type=str)
 parser.add_argument("exec", type=str)
 args = parser.parse_args()
 
+
+def lua_string(value: str) -> str:
+    return json.dumps(value)
+
+
+def workspace_value(value: str | int) -> str:
+    if isinstance(value, int):
+        return str(value)
+    return lua_string(value)
+
+
+def dispatch(command: str) -> None:
+    subprocess.run(["hyprctl", "dispatch", command], check=True)
+
+
 clients_json = subprocess.run(
-    ["hyprctl", "-j", "clients"], capture_output=True, text=True
+    ["hyprctl", "-j", "clients"], capture_output=True, text=True, check=True
 ).stdout
 clients = json.loads(clients_json)
 
@@ -27,13 +41,13 @@ for i in clients:
         break
 
 if not exists:
-    os.system(f"hyprctl dispatch exec [float] '{args.exec}'")
-    os.system(f"hyprctl dispatch focuswindow {args.window}")
+    dispatch(f"hl.dsp.exec_cmd({lua_string(args.exec)}, {{ float = true }})")
+    dispatch(f"hl.dsp.focus({{ window = {lua_string(args.window)} }})")
     print("started")
     exit()
 
 current_window_json = subprocess.run(
-    ["hyprctl", "-j", "activewindow"], capture_output=True, text=True
+    ["hyprctl", "-j", "activewindow"], capture_output=True, text=True, check=True
 ).stdout
 current_window = json.loads(current_window_json)
 
@@ -42,18 +56,27 @@ if current_window != {}:
     ws = current_window["workspace"]["name"]
 else:
     current_wokrspace_json = subprocess.run(
-        ["hyprctl", "-j", "activeworkspace"], capture_output=True, text=True
+        ["hyprctl", "-j", "activeworkspace"], capture_output=True, text=True, check=True
     ).stdout
     current_workspace = json.loads(current_wokrspace_json)["id"]
     ws = current_workspace
 
 
 if window["workspace"]["id"] != current_workspace:
-    os.system(f"hyprctl dispatch movetoworkspacesilent {ws},{args.window}")
-    os.system(f"hyprctl dispatch focuswindow {args.window}")
+    dispatch(
+        "hl.dsp.window.move({ "
+        f"workspace = {workspace_value(ws)}, "
+        f"window = {lua_string(args.window)}, "
+        "follow = false })"
+    )
+    dispatch(f"hl.dsp.focus({{ window = {lua_string(args.window)} }})")
 
 else:
     if window["focusHistoryID"] == 0:
-        os.system(f"hyprctl dispatch movetoworkspacesilent 99,{args.window}")
+        dispatch(
+            "hl.dsp.window.move({ "
+            f"workspace = 99, window = {lua_string(args.window)}, follow = false "
+            "})"
+        )
     else:
-        os.system(f"hyprctl dispatch focuswindow {args.window}")
+        dispatch(f"hl.dsp.focus({{ window = {lua_string(args.window)} }})")

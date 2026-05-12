@@ -1,17 +1,26 @@
 #!/bin/python3
 
-import os
+import json
 import subprocess
 
+
+def lua_string(value: str) -> str:
+    return json.dumps(value)
+
+
+def dispatch(command: str) -> None:
+    subprocess.run(["hyprctl", "dispatch", command], check=True)
+
+
 result = subprocess.run(
-    "ps a | grep youtube-music | grep electron",
-    shell=True,
+    ["pgrep", "youtube-music"],
     capture_output=True,
     text=True,
 )
-music_is_open = len(result.stdout.strip().split("\n")) > 1
+
+music_is_open = result.stdout.strip() != ""
 
 if not music_is_open:
-    os.system('hyprctl dispatch exec "[workspace special:music silent]" youtube-music')
-
-os.system("playerctl play-pause")
+    dispatch('hl.dsp.exec_cmd("youtube-music", {workspace = "special:music silent"})')
+else:
+    subprocess.run(["playerctl", "play-pause"])
