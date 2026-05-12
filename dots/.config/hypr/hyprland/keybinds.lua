@@ -6,8 +6,8 @@ local hyprScripts = "$HOME/.config/hypr/hyprland/scripts"
 local qsIpcCall = "qs -c $qsConfig ipc call"
 local qsIsAlive = qsIpcCall.." TEST_ALIVE"
 
-hl.bind("SUPER + SUPER_L", hl.dsp.global("quickshell:searchToggleRelease"), {description = "Toggle search"} )
-hl.bind("SUPER + SUPER_R", hl.dsp.global("quickshell:searchToggleRelease"))
+-- hl.bind("SUPER + SUPER_L", hl.dsp.global("quickshell:searchToggleRelease"), {description = "Toggle search"} )
+-- hl.bind("SUPER + SUPER_R", hl.dsp.global("quickshell:searchToggleRelease"))
 hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd(qsIsAlive.." || pkill fuzzel || fuzzel") )
 hl.bind("SUPER + SUPER_R", hl.dsp.exec_cmd(qsIsAlive.." || pkill fuzzel || fuzzel") )
 
@@ -59,9 +59,9 @@ hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd(qsIsAlive.." || pidof slurp || hypr
 hl.bind("SUPER + SHIFT + A", hl.dsp.global("quickshell:regionSearch"), {description = "Google Lens"} )
 hl.bind("SUPER + SHIFT + A", hl.dsp.exec_cmd(qsIsAlive.." || pidof slurp || "..hyprScripts.."/snip_to_search.sh") )
 --# OCR
-hl.bind("SUPER + SHIFT + X", hl.dsp.global("quickshell:regionOcr"), {description = "Character recognition >> clipboard"} )
+hl.bind("SUPER + CTRL + X", hl.dsp.global("quickshell:regionOcr"), {description = "Character recognition >> clipboard"} )
 hl.bind("SUPER + SHIFT + T", hl.dsp.global("quickshell:screenTranslate"), {description = "Translate screen content"} )
-hl.bind("SUPER + SHIFT + X", hl.dsp.exec_cmd(
+hl.bind("SUPER + CTRL + X", hl.dsp.exec_cmd(
  qsIsAlive.." || pidof slurp || grim -g \"$(slurp $SLURP_ARGS)\" \"/tmp/ocr_image.png\" && tesseract \"/tmp/ocr_image.png\" stdout -l $(tesseract --list-langs | awk 'NR>1{print $1}' | tr '\\\\n' '+' | sed 's/\\\\+$/\\\\n/') | wl-copy && rm \"/tmp/ocr_image.png\""
 ) )
 --# Color picker

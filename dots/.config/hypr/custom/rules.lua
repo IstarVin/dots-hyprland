@@ -13,28 +13,28 @@ hl.workspace_rule({ workspace = "special:waydroid", on_created_empty = "waydroid
 hl.window_rule({ match = { workspace = "special:waydroid" }, fullscreen = true })
 
 -- Floating Terminal
-hl.window_rule({ match = { title = "FloatingTerminal" }, size = {"(monitor_w*0.99)", "(monitor_h*0.4)"} })
-hl.window_rule({ match = { title = "FloatingTerminal" }, move = {"(monitor_w*0.005)", "(monitor_h*0.595)"} })
+hl.window_rule({ match = { title = "FloatingTerminal" }, size = { "(monitor_w*0.99)", "(monitor_h*0.4)" } })
+hl.window_rule({ match = { title = "FloatingTerminal" }, move = { "(monitor_w*0.005)", "(monitor_h*0.595)" } })
 hl.window_rule({ match = { title = "FloatingTerminal" }, opacity = "0.85" })
 hl.window_rule({ match = { title = "FloatingTerminal" }, no_blur = true })
 
 -- Temp Browser
-hl.window_rule({ match = { class = "TempBrowser" }, size = {"(monitor_w*0.99)", "(monitor_h*0.5)"} })
-hl.window_rule({ match = { class = "TempBrowser" }, move = {"(monitor_w*0.005)", "(monitor_h*0.495)"} })
+hl.window_rule({ match = { class = "TempBrowser" }, size = { "(monitor_w*0.99)", "(monitor_h*0.5)" } })
+hl.window_rule({ match = { class = "TempBrowser" }, move = { "(monitor_w*0.005)", "(monitor_h*0.495)" } })
 hl.window_rule({ match = { class = "TempBrowser" }, opacity = "0.90" })
 hl.window_rule({ match = { class = "TempBrowser" }, no_blur = true })
 hl.window_rule({ match = { class = "TempBrowser" }, float = true })
 
 -- Floating AI
-hl.window_rule({ match = { class = "^brave-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, size = {"(monitor_w*0.41)", "(monitor_h*0.945)"} })
-hl.window_rule({ match = { class = "^brave-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, move = {"(monitor_w*0.005)", "(monitor_h*0.045)"} })
-hl.window_rule({ match = { class = "^thorium-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, size = {"(monitor_w*0.41)", "(monitor_h*0.945)"} })
-hl.window_rule({ match = { class = "^thorium-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, move = {"(monitor_w*0.005)", "(monitor_h*0.045)"} })
+hl.window_rule({ match = { class = "^brave-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, size = { "(monitor_w*0.41)", "(monitor_h*0.945)" } })
+hl.window_rule({ match = { class = "^brave-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, move = { "(monitor_w*0.005)", "(monitor_h*0.045)" } })
+hl.window_rule({ match = { class = "^thorium-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, size = { "(monitor_w*0.41)", "(monitor_h*0.945)" } })
+hl.window_rule({ match = { class = "^thorium-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, move = { "(monitor_w*0.005)", "(monitor_h*0.045)" } })
 
 -- MPV
 hl.window_rule({ match = { class = "mpv" }, float = true })
 hl.window_rule({ match = { class = "mpv" }, center = true })
-hl.window_rule({ match = { class = "mpv" }, size = {"(monitor_w*0.7)", "(monitor_h*0.7)"} })
+hl.window_rule({ match = { class = "mpv" }, size = { "(monitor_w*0.7)", "(monitor_h*0.7)" } })
 hl.window_rule({ match = { class = "mpv" }, opacity = "1" })
 
 -- Make 100% Opaque
