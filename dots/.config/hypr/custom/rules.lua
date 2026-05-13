@@ -12,42 +12,59 @@ hl.workspace_rule({ workspace = "special:waydroid", on_created_empty = "waydroid
 
 hl.window_rule({ match = { workspace = "special:waydroid" }, fullscreen = true })
 
--- Floating Terminal
-hl.window_rule({ match = { title = "FloatingTerminal" }, size = { "(monitor_w*0.99)", "(monitor_h*0.4)" } })
-hl.window_rule({ match = { title = "FloatingTerminal" }, move = { "(monitor_w*0.005)", "(monitor_h*0.595)" } })
-hl.window_rule({ match = { title = "FloatingTerminal" }, opacity = "0.85" })
-hl.window_rule({ match = { title = "FloatingTerminal" }, no_blur = true })
+hl.window_rule({
+    match = { title = "FloatingTerminal" },
+    size = { "(monitor_w*0.99)", "(monitor_h*0.4)" },
+    move = { "(monitor_w*0.005)", "(monitor_h*0.595)" },
+    opacity = "0.85",
+    no_blur = true
+})
 
--- Temp Browser
-hl.window_rule({ match = { class = "TempBrowser" }, size = { "(monitor_w*0.99)", "(monitor_h*0.5)" } })
-hl.window_rule({ match = { class = "TempBrowser" }, move = { "(monitor_w*0.005)", "(monitor_h*0.495)" } })
-hl.window_rule({ match = { class = "TempBrowser" }, opacity = "0.90" })
-hl.window_rule({ match = { class = "TempBrowser" }, no_blur = true })
-hl.window_rule({ match = { class = "TempBrowser" }, float = true })
+hl.window_rule({
+    match = { class = "TempBrowser" },
+    size = { "(monitor_w*0.99)", "(monitor_h*0.5)" },
+    move = { "(monitor_w*0.005)", "(monitor_h*0.495)" },
+    opacity = "0.90",
+    float = true,
+    no_blur = true
+})
 
 -- Floating AI
-hl.window_rule({ match = { class = "^brave-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, size = { "(monitor_w*0.41)", "(monitor_h*0.945)" } })
-hl.window_rule({ match = { class = "^brave-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, move = { "(monitor_w*0.005)", "(monitor_h*0.045)" } })
-hl.window_rule({ match = { class = "^thorium-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, size = { "(monitor_w*0.41)", "(monitor_h*0.945)" } })
-hl.window_rule({ match = { class = "^thorium-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)" }, move = { "(monitor_w*0.005)", "(monitor_h*0.045)" } })
+local browsers = { "brave", "thorium" }
+for i = 1, #browsers do
+    local class_regex = "^" .. browsers[i] .. "-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)"
+    hl.window_rule({
+        match = { class = class_regex },
+        move = { "(monitor_w*0.005)", "(monitor_h*0.045)" },
+        size = { "(monitor_w*0.35)", "(monitor_h*0.945)" },
+        opacity = "0.89 override",
+        no_blur = true
+    })
+end
 
 -- MPV
-hl.window_rule({ match = { class = "mpv" }, float = true })
-hl.window_rule({ match = { class = "mpv" }, center = true })
-hl.window_rule({ match = { class = "mpv" }, size = { "(monitor_w*0.7)", "(monitor_h*0.7)" } })
-hl.window_rule({ match = { class = "mpv" }, opacity = "1" })
-
--- Make 100% Opaque
-hl.window_rule({ match = { title = "(.*)(- YouTube)(.*)" }, opacity = "1 override" })
-hl.window_rule({ match = { class = "^(virt-viewer)$" }, opacity = "1 override" })
+hl.window_rule({
+    match = { class = "mpv" },
+    float = true,
+    center = true,
+    size = { "(monitor_w*0.7)", "(monitor_h*0.7)" },
+    opacity = "1"
+})
 
 -- Open YouTube Music to special workspace
 hl.window_rule({ match = { class = "^(com.github.th_ch.youtube_music)$" }, workspace = "special:music" })
 
--- ######## Window rules ########
+local blur_classes = { "code", "org.gnome.Nautilus" }
+for i = 1, #blur_classes do
+    hl.window_rule({ match = { class = blur_classes[i] }, opacity = "0.89 override", no_blur = false })
+end
 
 -- Uncomment to apply global transparency to all windows:
 -- hl.window_rule({ match = { class = ".*" }, opacity = "0.89 override 0.89 override" })
 
 -- Disable blur for all xwayland apps
 -- hl.window_rule({ match = { xwayland = 1 }, no_blur = true })
+
+-- Make 100% Opaque
+hl.window_rule({ match = { title = "(.*)(- YouTube)(.*)" }, opacity = "1 override" })
+hl.window_rule({ match = { class = "^(virt-viewer)$" }, opacity = "1 override" })
