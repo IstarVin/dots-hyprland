@@ -42,7 +42,7 @@ hl.window_rule({ match = { title = "(.*)(- YouTube)(.*)" }, opacity = "1 overrid
 hl.window_rule({ match = { class = "^(virt-viewer)$" }, opacity = "1 override" })
 
 -- Open YouTube Music to special workspace
-hl.window_rule({ match = { class = "^(com.github.th_ch.youtube_music)$" }, workspace = "special:music silent" })
+hl.window_rule({ match = { class = "^(com.github.th_ch.youtube_music)$" }, workspace = "special:music" })
 
 -- ######## Window rules ########
 
