@@ -10,6 +10,7 @@ hl.workspace_rule({ workspace = "special:chatgpt", on_created_empty = [[brave --
 hl.workspace_rule({ workspace = "special:win11", on_created_empty = "looking-glass-client -F" })
 hl.workspace_rule({ workspace = "special:waydroid", on_created_empty = "waydroid show-full-ui" })
 
+-- # Window Rules
 hl.window_rule({ match = { workspace = "special:waydroid" }, fullscreen = true })
 
 hl.window_rule({
@@ -56,7 +57,7 @@ hl.window_rule({ match = { class = "^(com.github.th_ch.youtube_music)$" }, works
 
 local blur_classes = { "code", "org.gnome.Nautilus" }
 for i = 1, #blur_classes do
-    hl.window_rule({ match = { class = blur_classes[i] }, opacity = "0.89 override", no_blur = false })
+    hl.window_rule({ match = { class = blur_classes[i] }, opacity = "0.89 override 0.89 override", no_blur = false })
 end
 
 -- Uncomment to apply global transparency to all windows:
@@ -68,3 +69,6 @@ end
 -- Make 100% Opaque
 hl.window_rule({ match = { title = "(.*)(- YouTube)(.*)" }, opacity = "1 override" })
 hl.window_rule({ match = { class = "^(virt-viewer)$" }, opacity = "1 override" })
+
+-- Layer Rules
+hl.layer_rule({ match = { namespace = "code" }, no_anim = true })

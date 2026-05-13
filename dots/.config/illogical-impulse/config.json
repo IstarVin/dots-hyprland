@@ -166,7 +166,7 @@
         "utilButtons": {
             "showColorPicker": true,
             "showDarkModeToggle": false,
-            "showKeyboardToggle": false,
+            "showKeyboardToggle": true,
             "showMicToggle": false,
             "showPerformanceProfileToggle": true,
             "showScreenRecord": true,
@@ -486,6 +486,7 @@
     "updates": {
         "adviseUpdateThreshold": 75,
         "checkInterval": 120,
+        "enableCheck": true,
         "stronglyAdviseUpdateThreshold": 200
     },
     "waffles": {

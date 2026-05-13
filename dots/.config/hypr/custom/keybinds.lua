@@ -45,6 +45,8 @@ hl.bind("SUPER + SHIFT + W", hl.dsp.exec_cmd("brave --user-data-dir=\"/mnt/AJ/.b
 hl.bind("SUPER + SHIFT + B", hl.dsp.workspace.toggle_special("facebook"), { description = "Facebook" })
 hl.bind("SUPER + SHIFT + M", hl.dsp.workspace.toggle_special("music"), { description = "Youtube Music" })
 hl.bind("SUPER + G", hl.dsp.exec_cmd(scriptsDir .. "/minimize.py \"class:brave-chat.deepseek.com__-Default\" \"brave --user-data-dir=/mnt/AJ/.deepseek --app=https://chat.deepseek.com/\""), { description = "Temp Browser (Brave)" })
+hl.bind("SUPER + grave", hl.dsp.exec_cmd(scriptsDir .. "/minimize.py \"class:brave-www.perplexity.ai__-Default\" \"brave --user-data-dir=/mnt/AJ/.perplexity --app=https://www.perplexity.ai/\""), { description = "Temp Browser (Brave)" })
+hl.bind("SUPER + SHIFT + grave", hl.dsp.exec_cmd(scriptsDir .. "/minimize.py \"class:brave-claude.ai__new-Default\" \"brave --user-data-dir=/mnt/AJ/.claude --app=https://claude.ai/new\""), { description = "Temp Browser (Brave)" })
 hl.bind("SUPER + SHIFT + G", hl.dsp.exec_cmd(scriptsDir .. "/minimize.py \"class:brave-chatgpt.com__-Default\" \"brave --user-data-dir=/mnt/AJ/.chatgpt --app=https://chatgpt.com/\""), { description = "Temp Browser (Brave)" })
 hl.bind("SUPER + E", hl.dsp.exec_cmd("nautilus -w"), { description = "Nautilus" })
 hl.bind("SUPER + CTRL + Space", hl.dsp.exec_cmd([[kitty --title Project -e zsh -c "source ~/.zshrc && ~/.bin/sessionizer"]]), { description = "Project Tmux Launcher" })
@@ -52,6 +54,8 @@ hl.bind("SUPER + SHIFT + Space", hl.dsp.exec_cmd([[kitty -e zsh -c "source ~/.zs
 hl.bind("SUPER + SHIFT + X", hl.dsp.exec_cmd([[kitty -e zsh -c "source ~/.zshrc && ~/.bin/sessionizer --code-insider"]]), { description = "Project Code Launcher" })
 hl.bind("SUPER + SHIFT + Z", hl.dsp.exec_cmd(scriptsDir .. "/startvm.sh win11"), { description = "Windows 11 VM" })
 hl.bind("SUPER + SHIFT + D", hl.dsp.workspace.toggle_special("waydroid"))
+
+hl.bind("SUPER + SHIFT + Tab", hl.dsp.global("quickshell:oskToggle"), { description = "Toggle on-screen keyboard" })
 
 --##! Workspace
 hl.bind("SUPER + S", hl.dsp.exec_cmd(scriptsDir .. "/togglespecial.py"), { description = "Toggle Special Workspace" })
