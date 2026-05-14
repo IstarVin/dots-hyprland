@@ -122,7 +122,9 @@ hl.bind("SUPER + P", hl.dsp.window.pin(), {description = "Pin"} )
 --# We use raw keycodes because some keyboard layouts register number keys as different chars. The codes can be verified with `wev`
 for i = 1, 10 do
  local numberkey = {10,11,12,13,14,15,16,17,18,19}
- hl.bind("SUPER + ALT + code:"..numberkey[i], hl.dsp.window.move({ workspace = i, follow = false}) )
+ hl.bind("SUPER + ALT + code:"..numberkey[i], function ()
+    hl.dispatch(hl.dsp.window.move({ workspace = get_proper_workspace(numberkey[i] - 9), follow = false }))
+ end )
 end
 --# keypad numbers
 for i = 1, 10 do

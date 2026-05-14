@@ -1,3 +1,5 @@
+require("custom.variables")
+
 -- See https://wiki.hyprland.org/Configuring/Binds/
 --#!
 --##! User
@@ -66,8 +68,10 @@ hl.bind("SUPER + ALT + Left", hl.dsp.focus({ workspace = "r-10" }))
 --##! Moving
 --#/# bind = SUPER+SHIFT, Hash,, # Move to workspace # (1, 2, 3,...)
 for i = 1, 10 do
-    local key = i == 10 and "0" or tostring(i)
-    hl.bind("SUPER + SHIFT + " .. key, hl.dsp.exec_cmd("~/.config/hypr/hyprland/scripts/workspace_action.sh movetoworkspace " .. i)) -- # [hidden]
+    local key = i == 10 and 0 or i
+    hl.bind("SUPER + SHIFT + " .. tostring(key), function()
+        hl.dispatch(hl.dsp.window.move({ workspace = get_proper_workspace(key) }))
+    end)
 end
 
 -- Action
