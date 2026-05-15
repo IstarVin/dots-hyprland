@@ -39,7 +39,7 @@ for i = 1, #browsers do
         move = { "(monitor_w*0.005)", "(monitor_h*0.045)" },
         size = { "(monitor_w*0.35)", "(monitor_h*0.945)" },
         opacity = "0.89 override",
-        no_blur = true
+        no_blur = false
     })
 end
 
