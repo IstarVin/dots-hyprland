@@ -16,4 +16,4 @@ if ! virsh -c qemu:///system list | grep $1 | grep running >/dev/null 2>&1; then
     # sleep 1
 fi
 
-hyprctl dispatch togglespecialworkspace $1
+hyprctl dispatch "hl.dsp.workspace.toggle_special('$1')"
