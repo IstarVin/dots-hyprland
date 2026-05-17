@@ -57,7 +57,7 @@ hl.window_rule({
 -- Open YouTube Music to special workspace
 hl.window_rule({ match = { class = "^(com.github.th_ch.youtube_music)$" }, workspace = "special:music" })
 
-local blur_classes = { "code", "org.gnome.Nautilus", "kitty" }
+local blur_classes = { "code", "org.gnome.Nautilus", "kitty", "jetbrains-studio" }
 for i = 1, #blur_classes do
     hl.window_rule({ match = { class = blur_classes[i] }, opacity = "0.89 override 0.89 override", no_blur = false })
 end

@@ -157,7 +157,9 @@ hl.bind("CTRL + SUPER + S", hl.dsp.workspace.toggle_special("special") )
 --# We use raw keycodes because some keyboard layouts register number keys as different chars. The codes can be verified with `wev`
 for i = 1, 10 do
  local numberkey = {10,11,12,13,14,15,16,17,18,19}
- hl.bind("SUPER + code:"..numberkey[i], hl.dsp.focus({ workspace = i}) )
+ hl.bind("SUPER + code:"..numberkey[i], function ()
+   hl.dispatch(hl.dsp.focus({ workspace = get_proper_workspace(i) }))
+ end)
 end
 --# keypad numbers
 for i = 1, 10 do

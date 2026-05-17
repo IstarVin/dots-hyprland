@@ -1,54 +1,93 @@
 #!/usr/bin/env bash
 
-useCode=0
-args=$@
+set -euo pipefail
 
-if [[ "$@" == *"--code"* ]]; then
-    useCode=1
-    args=($(printf "%s\n" "$@" | grep -v -- '--code'))
-    echo $args
-fi
-if [[ -n "$args" ]]; then
-    selected=$args
-else
-    paths=$(find ~/Projects/ -mindepth 1 -maxdepth 1 -type d)
-    paths+=$(printf "\n%s" "/home/aj/dotfiles")
-    paths+=$(printf "\n%s" "create-new")
-    selected=$(echo "$paths" | fzf)
-fi
+use_code=0
+selection_args=()
+search_roots=(
+    "$HOME/Projects"
+    "/home/aj/AndroidStudioProjects"
+)
 
-if [[ -z $selected ]]; then
+for arg in "$@"; do
+    if [[ "$arg" == "--code" ]]; then
+        use_code=1
+        continue
+    fi
+
+    selection_args+=("$arg")
+done
+
+build_paths() {
+    local root
+
+    for root in "${search_roots[@]}"; do
+        [[ -d "$root" ]] || continue
+        find "$root" -mindepth 1 -maxdepth 1 -type d
+    done
+
+    printf '%s\n' "/home/aj/dotfiles"
+    printf '%s\n' "create-new"
+}
+
+pick_project() {
+    if ((${#selection_args[@]} > 0)); then
+        printf '%s\n' "${selection_args[*]}"
+        return
+    fi
+
+    build_paths | fzf
+}
+
+create_project() {
+    local project_name
+
+    printf 'Enter new project name: '
+    read -r project_name
+
+    [[ -n "$project_name" ]] || return 1
+
+    printf '%s\n' "$HOME/Projects/$project_name"
+}
+
+open_in_tmux() {
+    local selected_path=$1
+    local session_name
+    local tmux_running
+
+    session_name=$(basename "$selected_path" | tr '.' '_')
+    tmux_running=$(pgrep tmux || true)
+
+    if [[ -z "${TMUX:-}" ]] && [[ -z "$tmux_running" ]]; then
+        tmux new-session -s "$session_name" -c "$selected_path"
+        return
+    fi
+
+    if ! tmux has-session -t="$session_name" 2>/dev/null; then
+        tmux new-session -ds "$session_name" -c "$selected_path"
+    fi
+
+    if [[ -z "${TMUX:-}" ]]; then
+        tmux attach -t "$session_name"
+    else
+        tmux switch-client -t "$session_name"
+    fi
+}
+
+selected=$(pick_project)
+
+if [[ -z "$selected" ]]; then
     exit 0
 fi
 
-if [[ $selected == "create-new" ]]; then
-    echo "Enter new project name: "
-    read project_name
-
-    selected="/home/aj/Projects/$project_name"
-    echo $selected
-    mkdir $selected
+if [[ "$selected" == "create-new" ]]; then
+    selected=$(create_project) || exit 0
+    mkdir -p "$selected"
 fi
 
-if [[ $useCode -eq 1 ]]; then
+if ((use_code == 1)); then
     code "$selected" 2>/dev/null
     exit 0
 fi
 
-selected_name=$(basename "$selected" | tr . _)
-tmux_running=$(pgrep tmux)
-
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    tmux new-session -s $selected_name -c $selected
-    exit 0
-fi
-
-if ! tmux has-session -t=$selected_name 2>/dev/null; then
-    tmux new-session -ds $selected_name -c $selected
-fi
-
-if [[ -z $TMUX ]]; then
-    tmux attach -t $selected_name
-else
-    tmux switch-client -t $selected_name
-fi
+open_in_tmux "$selected"
