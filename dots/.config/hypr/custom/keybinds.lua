@@ -1,4 +1,4 @@
-require("custom.variables")
+require("hyprland.lib")
 
 -- See https://wiki.hyprland.org/Configuring/Binds/
 --#!
@@ -70,7 +70,7 @@ hl.bind("SUPER + ALT + Left", hl.dsp.focus({ workspace = "r-10" }))
 for i = 1, 10 do
     local key = i == 10 and 0 or i
     hl.bind("SUPER + SHIFT + " .. tostring(key), function()
-        hl.dispatch(hl.dsp.window.move({ workspace = get_proper_workspace(key) }))
+        hl.dispatch(hl.dsp.window.move({ workspace = workspace_in_group(key) }))
     end)
 end
 
