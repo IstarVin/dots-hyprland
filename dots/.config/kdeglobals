@@ -149,6 +149,8 @@ toolBarFont=Google Sans Flex,10,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Medium
 Theme=breeze-plus-dark
 
 [KDE]
+contrast=4
+frameContrast=0.2
 widgetStyle=Darkly
 
 [KFileDialog Settings]
@@ -175,7 +177,7 @@ Theme=freedesktop
 activeBackground=53,53,53
 activeBlend=252,252,252
 activeFont=Google Sans Flex,10,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Medium
-activeForeground=230,224,233
-inactiveBackground=76,70,90
+activeForeground=226,226,226
+inactiveBackground=69,72,92
 inactiveBlend=161,169,177
 inactiveForeground=223,225,249
