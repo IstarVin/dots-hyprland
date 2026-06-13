@@ -13,14 +13,15 @@ def dispatch(command: str) -> None:
 
 
 result = subprocess.run(
-    ["pgrep", "youtube-music"],
+    ["pgrep", "-a", "electron"],
     capture_output=True,
     text=True,
 )
 
-music_is_open = result.stdout.strip() != ""
+music_is_open = "pear-desktop" in result.stdout
+
 
 if not music_is_open:
-    dispatch('hl.dsp.exec_cmd("youtube-music", {workspace = "special:music silent"})')
+    dispatch('hl.dsp.exec_cmd("pear-desktop", {workspace = "special:music silent"})')
 else:
     subprocess.run(["playerctl", "play-pause"])

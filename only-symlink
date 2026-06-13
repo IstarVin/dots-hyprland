@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Repository root = directory containing this script
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+CONFIG_SRC="$REPO_DIR/dots/.config"
+HOME_SRC="$REPO_DIR/dots/.home"
+
+CONFIG_DEST="$HOME/.config"
+HOME_DEST="$HOME"
+
+BACKUP_DIR="$HOME/.symlink-backups/$(date +%Y%m%d-%H%M%S)"
+
+mkdir -p "$BACKUP_DIR"
+mkdir -p "$CONFIG_DEST"
+
+backup_and_link() {
+    local src="$1"
+    local dst="$2"
+
+    # Already a symlink
+    if [[ -L "$dst" ]]; then
+        local current
+        current="$(readlink "$dst")"
+
+        if [[ "$current" == "$src" ]]; then
+            echo "[OK] Already linked: $dst -> $src"
+            return
+        fi
+
+        echo "[UPDATE] $dst"
+        rm "$dst"
+        ln -s "$src" "$dst"
+        return
+    fi
+
+    # Existing file/dir
+    if [[ -e "$dst" ]]; then
+        local rel_backup
+        rel_backup="$(basename "$dst")"
+
+        echo "[BACKUP] $dst"
+        mv "$dst" "$BACKUP_DIR/$rel_backup"
+    fi
+
+    echo "[LINK] $dst -> $src"
+    ln -s "$src" "$dst"
+}
+
+echo "Repository: $REPO_DIR"
+echo "Backups:    $BACKUP_DIR"
+echo
+
+#
+# dots/.config/* -> ~/.config/*
+#
+if [[ -d "$CONFIG_SRC" ]]; then
+    echo "Processing .config..."
+
+    while IFS= read -r -d '' item; do
+        name="$(basename "$item")"
+        backup_and_link "$item" "$CONFIG_DEST/$name"
+    done < <(find "$CONFIG_SRC" -mindepth 1 -maxdepth 1 -print0)
+fi
+
+#
+# dots/.home/* -> ~/*
+#
+if [[ -d "$HOME_SRC" ]]; then
+    echo
+    echo "Processing .home..."
+
+    while IFS= read -r -d '' item; do
+        name="$(basename "$item")"
+        backup_and_link "$item" "$HOME_DEST/$name"
+    done < <(find "$HOME_SRC" -mindepth 1 -maxdepth 1 -print0)
+fi
+
+echo
+echo "Done."
+echo "Backups stored in:"
+echo "$BACKUP_DIR"
