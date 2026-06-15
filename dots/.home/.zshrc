@@ -164,6 +164,9 @@ alias android-builder='docker start android-builder && docker exec -it android-b
 
 alias reboot-windows='systemctl reboot --boot-loader-entry=windows.conf'
 
+alias powersave-services='sudo systemctl stop libvirtd docker containerd'
+alias restore-services='sudo systemctl start libvirtd docker containerd'
+
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init zsh)"
