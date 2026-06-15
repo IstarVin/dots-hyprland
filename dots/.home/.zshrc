@@ -95,6 +95,16 @@ function yy() {
 	rm -f -- "$tmp"
 }
 
+if [[ $XDG_CURRENT_DESKTOP == "GNOME" ]]; then
+  alias 60fps='gdctl set -L -p -M eDP-1 -m 1920x1080@60.004+vrr'
+  alias 144fps='gdctl set -L -p -M eDP-1 -m 1920x1080@144.003+vrr'
+else
+  alias 60fps='hyprctl eval "hl.monitor({output=\"\",mode=\"1920x1080@60\"})"'
+  alias 144fps='hyprctl eval "hl.monitor({output=\"\",mode=\"1920x1080@144\"})"'
+fi
+
+
+
 if [[ $TERM == "xterm-kitty" ]]; then
   alias ssh='kitty +kitten ssh'
 fi
@@ -119,8 +129,6 @@ alias ..='cd ..'
 alias ~='cd ~'
 alias co='curl -O'
 alias update-mirrors='sudo reflector -a 48 -c JP -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist'
-alias 60fps='hyprctl eval "hl.monitor({output=\"\",mode=\"1920x1080@60\"})"'
-alias 144fps='hyprctl eval "hl.monitor({output=\"\",mode=\"1920x1080@144\"})"'
 alias Quiet='asusctl profile -P Quiet'
 alias Balanced='asusctl profile -P Balanced'
 alias Performance='asusctl profile -P Performance'
