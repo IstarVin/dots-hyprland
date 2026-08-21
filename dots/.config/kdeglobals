@@ -63,11 +63,11 @@ ForegroundPositive=#00e479
 ForegroundVisited=#ebb2ff
 
 [Colors:Header][Inactive]
-BackgroundAlternate=#1d1d1e
+BackgroundAlternate=#474747
 BackgroundNormal=#1d1d1e
 DecorationFocus=#b6c0fc
 DecorationHover=#b6c0fc
-ForegroundActive=#e2e2e2
+ForegroundActive=#8fc9fc
 ForegroundInactive=#919191
 ForegroundLink=#8fc9fc
 ForegroundNegative=#ffb3b4
@@ -168,7 +168,7 @@ Sort directories first=true
 Sort hidden files last=false
 Sort reversed=false
 Speedbar Width=168
-View Style=Simple
+View Style=DetailTree
 
 [Sounds]
 Theme=freedesktop
@@ -181,4 +181,3 @@ activeForeground=226,226,226
 inactiveBackground=69,72,92
 inactiveBlend=161,169,177
 inactiveForeground=223,225,249
-

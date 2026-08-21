@@ -1,6 +1,6 @@
 {
   "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[dart]": {
     "editor.formatOnSave": true,
@@ -8,30 +8,30 @@
     "editor.rulers": [80],
     "editor.selectionHighlight": false,
     "editor.tabCompletion": "onlySnippets",
-    "editor.wordBasedSuggestions": "off"
+    "editor.wordBasedSuggestions": "off",
   },
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode",
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "biome.requireConfiguration": true,
   "catppuccin-icons.hidesExplorerArrows": true,
@@ -42,62 +42,42 @@
     "./gradlew": true,
     "/^\\./gradlew :app:assembleDebug$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^bun run check$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^npx tsx scripts/generate-sitios-from-csv\\.ts$/": {
       "approve": true,
-      "matchCommandLine": true
-    },
-    "/^pnpm check 2>&1 \\| head -100$/": {
-      "approve": true,
-      "matchCommandLine": true
-    },
-    "/^pnpm check 2>&1 \\| head -20$/": {
-      "approve": true,
-      "matchCommandLine": true
-    },
-    "/^pnpm check 2>&1 \\| head -50$/": {
-      "approve": true,
-      "matchCommandLine": true
-    },
-    "/^pnpm check 2>&1 \\| head -60$/": {
-      "approve": true,
-      "matchCommandLine": true
-    },
-    "/^pnpm check 2>&1 \\| head -80$/": {
-      "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^pnpm check 2>&1$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^pnpm check$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
     "/^pnpm lint$/": {
       "approve": true,
-      "matchCommandLine": true
+      "matchCommandLine": true,
     },
-    "sed": true
+    "sed": true,
   },
   "chat.tools.terminal.terminalProfile.linux": {
-    "path": "/bin/bash"
+    "path": "/bin/bash",
   },
   "chat.tools.urls.autoApprove": {
     "https://code.visualstudio.com": true,
     "https://docs.rs": true,
     "https://dramabox.dramafren.org": true,
-    "https://github.com/microsoft/vscode/wiki/*": true
+    "https://github.com/microsoft/vscode/wiki/*": true,
   },
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always",
-    "source.sortImports": "always"
+    "source.sortImports": "always",
   },
   "editor.cursorBlinking": "phase",
   "editor.cursorSmoothCaretAnimation": "on",
@@ -121,7 +101,7 @@
     ["</", ">"],
     ["{", "}"],
     ["[", "]"],
-    ["(", ")"]
+    ["(", ")"],
   ],
   "editor.lightbulb.enabled": "off",
   "editor.matchBrackets": "near",
@@ -131,7 +111,7 @@
   "editor.quickSuggestions": {
     "comments": false,
     "other": true,
-    "strings": true
+    "strings": true,
   },
   "editor.renderControlCharacters": false,
   "editor.renderLineHighlight": "none",
@@ -147,7 +127,7 @@
   "extensions.ignoreRecommendations": true,
   "files.associations": {
     ".env*": "dotenv",
-    "*.css": "tailwindcss"
+    "*.css": "tailwindcss",
   },
   "geminicodeassist.project": "serene-coral-jjcf0",
   "git.confirmSync": false,
@@ -158,30 +138,29 @@
     "dotenv": false,
     "markdown": false,
     "plaintext": false,
-    "scminput": false
+    "scminput": false,
   },
   "github.copilot.nextEditSuggestions.enabled": true,
   "gitlens.ai.model": "vscode",
   "gitlens.ai.vscode.model": "copilot:gpt-4.1",
-  "go.toolsManagement.autoUpdate": true,
-  "hediet.vscode-drawio.appearance": "light",
-  "hediet.vscode-drawio.codeLinkActivated": false,
-  "hediet.vscode-drawio.resizeImages": null,
-  "hediet.vscode-drawio.theme": "kennedy",
   "js/ts.preferences.importModuleSpecifier": "shortest",
   "js/ts.suggest.autoImports": true,
   "js/ts.updateImportsOnFileMove.enabled": "always",
   "json.schemaDownload.trustedDomains": {
     "https://biomejs.dev": true,
+    "https://developer.microsoft.com/json-schemas/": true,
     "https://docs.renovatebot.com": true,
     "https://esm.sh": true,
     "https://json-schema.org/": true,
     "https://json.schemastore.org/": true,
     "https://raw.githubusercontent.com/": true,
+    "https://raw.githubusercontent.com/devcontainers/spec/": true,
+    "https://raw.githubusercontent.com/microsoft/vscode/": true,
     "https://schema.tauri.app": true,
     "https://schemastore.azurewebsites.net/": true,
     "https://shadcn-svelte.com": true,
-    "https://www.schemastore.org/": true
+    "https://ui.shadcn.com": true,
+    "https://www.schemastore.org/": true,
   },
   "material-code.primaryColor": "#1C39AD",
   "mdb.mcp.server": "prompt",
@@ -198,22 +177,22 @@
   "terminal.integrated.profiles.linux": {
     "bash": {
       "icon": "terminal-bash",
-      "path": "bash"
+      "path": "bash",
     },
     "fish": {
-      "path": "fish"
+      "path": "fish",
     },
     "pwsh": {
       "icon": "terminal-powershell",
-      "path": "pwsh"
+      "path": "pwsh",
     },
     "tmux": {
       "icon": "terminal-tmux",
-      "path": "tmux"
+      "path": "tmux",
     },
     "zsh": {
-      "path": "/bin/zsh"
-    }
+      "path": "/bin/zsh",
+    },
   },
   "terminal.integrated.shellIntegration.history": 1000,
   "terminal.integrated.smoothScrolling": true,
@@ -223,30 +202,35 @@
     {
       "before": [":"],
       "commands": ["workbench.action.quickOpen"],
-      "silent": true
-    }
+      "silent": true,
+    },
   ],
   "vim.smartRelativeLine": true,
   "vim.useSystemClipboard": true,
   "window.commandCenter": false,
   "window.customMenuBarAltFocus": false,
-  "window.customTitleBarVisibility": "auto",
+  "window.customTitleBarVisibility": "never",
   "window.enableMenuBarMnemonics": false,
   "window.menuBarVisibility": "toggle",
+  "window.menuStyle": "custom",
   "window.restoreWindows": "none",
   "window.titleBarStyle": "native",
   "window.zoomLevel": 1.25,
   "workbench.colorTheme": "Catppuccin Mocha",
   "workbench.editor.enablePreviewFromQuickOpen": false,
-  "workbench.iconTheme": "catppuccin-mocha",
   "workbench.layoutControl.enabled": false,
   "workbench.secondarySideBar.defaultVisibility": "hidden",
-  "workbench.sideBar.location": "right",
   "workbench.startupEditor": "none",
   "workbench.tips.enabled": false,
   "zenMode.centerLayout": false,
   "zenMode.fullScreen": false,
   "zenMode.hideLineNumbers": false,
   "zenMode.hideStatusBar": true,
-  "zenMode.showTabs": "none"
+  "zenMode.showTabs": "none",
+  "workbench.iconTheme": "catppuccin-mocha",
+  "update.showReleaseNotes": false,
+  "terminal.integrated.initialHint": false,
+  "workbench.secondarySideBar.showLabels": false,
+  "workbench.sideBar.location": "right",
+  "chatgpt.followUpQueueMode": "steer",
 }
