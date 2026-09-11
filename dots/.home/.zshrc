@@ -159,6 +159,7 @@ alias pcrt='python2 /mnt/AJ/Projects/ctf/PCRT/PCRT.py'
 alias grepico='grep -o "picoCTF{.*}"'
 alias copy='wl-copy'
 alias grepicopy='grepico|copy'
+alias mkctf='mkdir -p "Binary Exploitation" Cryptography Forensics "General Skills" Others "Reverse Engineering" "Web Exploitation"'
 
 alias android-builder='docker start android-builder && docker exec -it android-builder /bin/zsh'
 
@@ -189,6 +190,7 @@ PATH="/home/aj/.bun/bin:$PATH"
 PATH="/home/aj/.local/share/JetBrains/Toolbox/scripts:$PATH"
 PATH="/home/aj/.local/share/gem/ruby/3.4.0/bin:$PATH"
 PATH="/home/aj/.deno/bin:$PATH"
+PATH="$HOME/.dotnet/tools:$PATH"
 
 # bun completions
 [ -s "/home/aj/.bun/_bun" ] && source "/home/aj/.bun/_bun"
