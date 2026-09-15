@@ -3,10 +3,10 @@
 -- Workspace rules: https://wiki.hyprland.org/Configuring/Workspace-Rules/
 
 -- Special Workspace
-hl.workspace_rule({ workspace = "special:facebook", on_created_empty = [[brave --app="https://facebook.com"]] })
+hl.workspace_rule({ workspace = "special:facebook", on_created_empty = [[brave-origin --app="https://facebook.com"]] })
 hl.workspace_rule({ workspace = "special:music", on_created_empty = "youtube-music" })
-hl.workspace_rule({ workspace = "special:deepseek", on_created_empty = [[brave --user-data-dir="/mnt/AJ/.deepseek" --app="https://chat.deepseek.com/"]] })
-hl.workspace_rule({ workspace = "special:chatgpt", on_created_empty = [[brave --user-data-dir="/mnt/AJ/.chatgpt" --app="https://chatgpt.com/"]] })
+hl.workspace_rule({ workspace = "special:deepseek", on_created_empty = [[brave-origin --user-data-dir="/mnt/AJ/.deepseek" --app="https://chat.deepseek.com/"]] })
+hl.workspace_rule({ workspace = "special:chatgpt", on_created_empty = [[brave-origin --user-data-dir="/mnt/AJ/.chatgpt" --app="https://chatgpt.com/"]] })
 hl.workspace_rule({ workspace = "special:win11", on_created_empty = "looking-glass-client -F" })
 hl.workspace_rule({ workspace = "special:waydroid", on_created_empty = "waydroid show-full-ui" })
 hl.workspace_rule({ workspace = "special:tecno", on_created_empty = "scrcpy -s 11026253AO103496 -S --keyboard=uhid" })
@@ -33,15 +33,24 @@ hl.window_rule({
 
 -- Floating AI
 local browsers = { "brave", "thorium" }
+local ai_domains = {
+    "chatgpt\\.com",
+    "chat\\.deepseek\\.com",
+    "www\\.perplexity\\.ai",
+    "claude\\.ai"
+}
 for i = 1, #browsers do
-    local class_regex = "^" .. browsers[i] .. "-([a-z]+\\.)*[a-z]+\\.*(__[a-z\\-]*Default)"
-    hl.window_rule({
-        match = { class = class_regex },
-        move = { "(monitor_w*0.005)", "(monitor_h*0.045)" },
-        size = { "(monitor_w*0.35)", "(monitor_h*0.945)" },
-        opacity = "0.89 override",
-        no_blur = false
-    })
+    for j = 1, #ai_domains do
+        local class_regex = "^" .. browsers[i] .. "-" .. ai_domains[j] .. "\\.*(__[a-z\\-]*Default)"
+        hl.window_rule({
+            match = { class = class_regex },
+            move = { "(monitor_w*0.005)", "(monitor_h*0.045)" },
+            size = { "(monitor_w*0.35)", "(monitor_h*0.945)" },
+            opacity = "0.89 override",
+            float = true,
+            no_blur = false
+        })
+    end
 end
 
 hl.window_rule({ match = { class = "(.*)facebook\\.com(.*)" }, opaque = true })
