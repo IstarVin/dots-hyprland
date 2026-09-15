@@ -9,6 +9,7 @@ hl.workspace_rule({ workspace = "special:deepseek", on_created_empty = [[brave -
 hl.workspace_rule({ workspace = "special:chatgpt", on_created_empty = [[brave --user-data-dir="/mnt/AJ/.chatgpt" --app="https://chatgpt.com/"]] })
 hl.workspace_rule({ workspace = "special:win11", on_created_empty = "looking-glass-client -F" })
 hl.workspace_rule({ workspace = "special:waydroid", on_created_empty = "waydroid show-full-ui" })
+hl.workspace_rule({ workspace = "special:tecno", on_created_empty = "scrcpy -s 11026253AO103496 -S --keyboard=uhid" })
 
 -- # Window Rules
 hl.window_rule({ match = { workspace = "special:waydroid" }, fullscreen = true })

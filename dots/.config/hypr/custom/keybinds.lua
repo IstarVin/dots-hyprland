@@ -56,6 +56,7 @@ hl.bind("SUPER + SHIFT + Space", hl.dsp.exec_cmd([[kitty -e zsh -c "source ~/.zs
 hl.bind("SUPER + SHIFT + X", hl.dsp.exec_cmd([[kitty -e zsh -c "source ~/.zshrc && ~/.bin/sessionizer --code-insider"]]), { description = "Project Code Launcher" })
 hl.bind("SUPER + SHIFT + Z", hl.dsp.exec_cmd(scriptsDir .. "/startvm.sh win11"), { description = "Windows 11 VM" })
 hl.bind("SUPER + SHIFT + D", hl.dsp.workspace.toggle_special("waydroid"))
+hl.bind("SUPER + CTRL + SHIFT + T", hl.dsp.workspace.toggle_special("tecno"))
 
 hl.bind("SUPER + SHIFT + Tab", hl.dsp.global("quickshell:oskToggle"), { description = "Toggle on-screen keyboard" })
 

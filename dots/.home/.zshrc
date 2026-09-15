@@ -191,6 +191,7 @@ PATH="/home/aj/.local/share/JetBrains/Toolbox/scripts:$PATH"
 PATH="/home/aj/.local/share/gem/ruby/3.4.0/bin:$PATH"
 PATH="/home/aj/.deno/bin:$PATH"
 PATH="$HOME/.dotnet/tools:$PATH"
+PATH="$HOME/Android/Sdk/build-tools/37.0.0:$PATH"
 
 # bun completions
 [ -s "/home/aj/.bun/_bun" ] && source "/home/aj/.bun/_bun"
