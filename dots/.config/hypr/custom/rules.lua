@@ -12,13 +12,19 @@ hl.workspace_rule({ workspace = "special:waydroid", on_created_empty = "waydroid
 hl.workspace_rule({ workspace = "special:tecno", on_created_empty = "scrcpy -s 11026253AO103496 -S --keyboard=uhid" })
 
 -- # Window Rules
+local blur_classes = { "code", "com.microsoft.VSCode", "org.gnome.Nautilus", "kitty", "jetbrains-studio" }
+for i = 1, #blur_classes do
+    hl.window_rule({ match = { class = blur_classes[i] }, opacity = "0.89 override 0.89 override", no_blur = false })
+end
+
 hl.window_rule({ match = { workspace = "special:waydroid" }, fullscreen = true })
 
 hl.window_rule({
-    match = { title = "FloatingTerminal" },
+    match = { class = "FloatingTerminal" },
     size = { "(monitor_w*0.99)", "(monitor_h*0.4)" },
     move = { "(monitor_w*0.005)", "(monitor_h*0.595)" },
     opacity = "0.85",
+    fullscreen_state = 0,
     no_blur = true
 })
 
@@ -64,13 +70,15 @@ hl.window_rule({
     opacity = "1"
 })
 
+-- kitty
+hl.window_rule({
+    match = { class = "kitty" },
+    fullscreen_state = 0
+})
+
 -- Open YouTube Music to special workspace
 hl.window_rule({ match = { class = "^(com.github.th_ch.youtube_music)$" }, workspace = "special:music" })
 
-local blur_classes = { "code", "org.gnome.Nautilus", "kitty", "jetbrains-studio" }
-for i = 1, #blur_classes do
-    hl.window_rule({ match = { class = blur_classes[i] }, opacity = "0.89 override 0.89 override", no_blur = false })
-end
 
 -- Uncomment to apply global transparency to all windows:
 -- hl.window_rule({ match = { class = ".*" }, opacity = "0.89 override 0.89 override" })

@@ -233,4 +233,7 @@
   "workbench.secondarySideBar.showLabels": false,
   "workbench.sideBar.location": "right",
   "chatgpt.followUpQueueMode": "steer",
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
 }

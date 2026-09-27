@@ -40,7 +40,7 @@ hl.unbind("SUPER + ALT + Left")
 
 --##! Apps
 hl.bind("SUPER + R", hl.dsp.exec_cmd("kitty"), { description = "Terminal (Kitty)" })
-hl.bind("SUPER + T", hl.dsp.exec_cmd(scriptsDir .. "/minimize.py \"title:FloatingTerminal\" \"kitty -T FloatingTerminal\""), { description = "Floating Terminal (Kitty)" })
+hl.bind("SUPER + T", hl.dsp.exec_cmd(scriptsDir .. "/minimize.py \"class:FloatingTerminal\" \"kitty --class FloatingTerminal\""), { description = "Floating Terminal (Kitty)" })
 hl.bind("SUPER + W", hl.dsp.exec_cmd("brave-origin"), { description = "Browser (Brave)" })
 hl.bind("SUPER + A", hl.dsp.exec_cmd(scriptsDir .. "/minimize.py \"class:TempBrowser\" \"brave-origin --class=TempBrowser --user-data-dir=/mnt/AJ/.brave-origin/temp\""), { description = "Temp Browser (Brave)" })
 hl.bind("SUPER + SHIFT + W", hl.dsp.exec_cmd("brave-origin --user-data-dir=\"/mnt/AJ/.brave-origin/hehe\"")) -- # [hidden]
