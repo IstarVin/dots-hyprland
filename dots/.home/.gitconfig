@@ -1,6 +1,7 @@
 [user]
 	email = ajdeleverio20@gmail.com
 	name = IstarVin
+	signingkey = /home/aj/.ssh/id_rsa.pub
 [url "https://github.com/"]
 	insteadOf = gh:
 [pull]
@@ -22,3 +23,7 @@
 [credential "https://gist.github.com"]
 	helper = 
 	helper = !/usr/bin/gh auth git-credential
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true

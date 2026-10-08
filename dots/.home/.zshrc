@@ -1,206 +1,308 @@
-# Add deno completions to search path
-if [[ ":$FPATH:" != *":/home/aj/.zsh/completions:"* ]]; then export FPATH="/home/aj/.zsh/completions:$FPATH"; fi
+# ~/.zshrc
+# Refactored Arch Linux Zsh configuration
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# -----------------------------------------------------------------------------
+# Powerlevel10k instant prompt
+# Keep this near the top. Anything that can require interactive input should
+# stay above this block.
+# -----------------------------------------------------------------------------
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# -----------------------------------------------------------------------------
+# Environment / paths
+# -----------------------------------------------------------------------------
 
-# Set the directory we want to store zinit and plugins
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+# Keep PATH/FPATH entries unique while preserving order.
+typeset -U path fpath
 
-# Download Zinit, if it's not there yet
-if [ ! -d "$ZINIT_HOME" ]; then
-   mkdir -p "$(dirname $ZINIT_HOME)"
-   git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+# Deno completions must be on FPATH before compinit.
+fpath=(
+  "$HOME/.zsh/completions"
+  $fpath
+)
+
+# Tool-managed environment.
+[[ -s "$HOME/.deno/env" ]] && source "$HOME/.deno/env"
+
+export PNPM_HOME="$HOME/.local/share/pnpm"
+
+# Prefer user-installed tools before system binaries.
+path=(
+  "$HOME/.local/bin"
+  "$HOME/.bin"
+  "$HOME/.config/hypr/scripts"
+  "$HOME/.bun/bin"
+  "$HOME/.local/share/JetBrains/Toolbox/scripts"
+  "$HOME/.local/share/gem/ruby/3.4.0/bin"
+  "$HOME/.deno/bin"
+  "$HOME/.dotnet/tools"
+  "$HOME/Android/Sdk/build-tools/37.0.0"
+  "/opt/android-sdk/platform-tools"
+  "$PNPM_HOME"
+  "${GOBIN:-${GOPATH:-$HOME/go}/bin}"
+  $path
+)
+
+export PATH
+
+# -----------------------------------------------------------------------------
+# History
+# -----------------------------------------------------------------------------
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=10000
+SAVEHIST=10000
+
+setopt APPEND_HISTORY
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_SPACE
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_EXPIRE_DUPS_FIRST
+
+# -----------------------------------------------------------------------------
+# Zinit
+# -----------------------------------------------------------------------------
+ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+
+if [[ ! -d "$ZINIT_HOME/.git" ]]; then
+  mkdir -p "${ZINIT_HOME:h}"
+  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 
-# Source/Load zinit
-source "${ZINIT_HOME}/zinit.zsh"
+source "$ZINIT_HOME/zinit.zsh"
 
-# Add in Powerlevel10k
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+# -----------------------------------------------------------------------------
+# Powerlevel10k
+# -----------------------------------------------------------------------------
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
 
-# Add in zsh plugins
-zinit ice depth=1; zinit light jeffreytse/zsh-vi-mode
-zinit light zsh-users/zsh-syntax-highlighting
+# -----------------------------------------------------------------------------
+# Completion system
+#
+# zsh-completions must extend FPATH before compinit.
+# -----------------------------------------------------------------------------
 zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions
-zinit light Aloxaf/fzf-tab
-#zinit light MichaelAquilina/zsh-autoswitch-virtualenv
 
-# Add in snippets
+ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+[[ -d "${ZSH_COMPDUMP:h}" ]] || mkdir -p "${ZSH_COMPDUMP:h}"
+
+autoload -Uz compinit
+compinit -d "$ZSH_COMPDUMP"
+
+# Completion behavior.
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' menu no
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format '[%d]'
+
+if [[ -n "${LS_COLORS:-}" ]]; then
+  zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+fi
+
+# -----------------------------------------------------------------------------
+# Oh My Zsh snippets
+# -----------------------------------------------------------------------------
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
 zinit snippet OMZP::archlinux
-#zinit snippet OMZP::aws
-#zinit snippet OMZP::kubectl
-#zinit snippet OMZP::kubectx
 zinit snippet OMZP::command-not-found
 
-# Load completions
-autoload -Uz compinit && compinit
+# Optional snippets:
+# zinit snippet OMZP::aws
+# zinit snippet OMZP::kubectl
+# zinit snippet OMZP::kubectx
 
-zinit cdreplay -q
+# -----------------------------------------------------------------------------
+# zsh-vi-mode
+#
+# Initialize while sourcing so later plugins can establish their final
+# keybindings deterministically.
+# -----------------------------------------------------------------------------
+ZVM_INIT_MODE=sourcing
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Keybindings
 function zvm_after_init() {
-    bindkey '^o' autosuggest-accept
-    bindkey '^p' history-search-backward
-    bindkey '^n' history-search-forward
-    bindkey '^[w' kill-region
+  bindkey '^O' autosuggest-accept
+  bindkey '^P' history-search-backward
+  bindkey '^N' history-search-forward
+  bindkey '^[w' kill-region
 }
-# bindkey -v
-#bindkey '^p' history-search-backward
-#bindkey '^n' history-search-forward
-#bindkey '^[w' kill-region
-# bindkey '^o' autosuggest-accept
-# bindkey '^p' history-search-backward
-# bindkey '^n' history-search-forward
-# bindkey '^[w' kill-region
 
-# History
-HISTSIZE=5000
-HISTFILE=~/.zsh_history
-SAVEHIST=$HISTSIZE
-HISTDUP=erase
-setopt appendhistory
-setopt sharehistory
-setopt hist_ignore_space
-setopt hist_ignore_all_dups
-setopt hist_save_no_dups
-setopt hist_ignore_dups
-setopt hist_find_no_dups
+zinit ice depth=1
+zinit light jeffreytse/zsh-vi-mode
 
-# Completion styling
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+# -----------------------------------------------------------------------------
+# Shell integrations
+#
+# Load fzf's own bindings before fzf-tab so fzf-tab becomes the final owner
+# of the Tab completion widget.
+# -----------------------------------------------------------------------------
+if (( $+commands[fzf] )); then
+  eval "$(fzf --zsh)"
+fi
 
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
+fi
+
+# fzf-tab must load after compinit and before autosuggestions/highlighting.
+zinit light Aloxaf/fzf-tab
+
+# Preview completion candidates.
+if (( $+commands[lsd] )); then
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'lsd -lah --color=always $realpath'
+  zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'lsd -lah --color=always $realpath'
+else
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -lah --color=always $realpath'
+  zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls -lah --color=always $realpath'
+fi
+
+# -----------------------------------------------------------------------------
 # Functions
+# -----------------------------------------------------------------------------
+
+# Yazi wrapper: leave the shell in Yazi's final directory.
 function yy() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
+  local tmp cwd
+
+  tmp="$(mktemp -t yazi-cwd.XXXXXX)" || return 1
+  yazi "$@" --cwd-file="$tmp"
+
+  cwd="$(<"$tmp")"
+  rm -f -- "$tmp"
+
+  if [[ -n "$cwd" && "$cwd" != "$PWD" ]]; then
+    builtin cd -- "$cwd"
+  fi
 }
 
-if [[ $XDG_CURRENT_DESKTOP == "GNOME" ]]; then
+# -----------------------------------------------------------------------------
+# Desktop-specific helpers
+# -----------------------------------------------------------------------------
+if [[ "$XDG_CURRENT_DESKTOP" == "GNOME" ]] && (( $+commands[gdctl] )); then
   alias 60fps='gdctl set -L -p -M eDP-1 -m 1920x1080@60.004+vrr'
   alias 144fps='gdctl set -L -p -M eDP-1 -m 1920x1080@144.003+vrr'
-else
+elif (( $+commands[hyprctl] )); then
   alias 60fps='hyprctl eval "hl.monitor({output=\"\",mode=\"1920x1080@60\"})"'
   alias 144fps='hyprctl eval "hl.monitor({output=\"\",mode=\"1920x1080@144\"})"'
 fi
 
-
-
-if [[ $TERM == "xterm-kitty" ]]; then
+if [[ "$TERM" == "xterm-kitty" ]] && (( $+commands[kitty] )); then
   alias ssh='kitty +kitten ssh'
 fi
 
-# aliases
-alias l='lsd'
-alias ls='lsd'
-# alias vim='nvim'
+# -----------------------------------------------------------------------------
+# General aliases
+# -----------------------------------------------------------------------------
+if (( $+commands[lsd] )); then
+  alias ls='lsd'
+  alias l='lsd'
+  alias ll='lsd -lh'
+  alias la='lsd -lah'
+  alias tree='lsd --tree'
+else
+  alias l='ls'
+  alias ll='ls -lh'
+  alias la='ls -lah'
+fi
+
+(( $+commands[bat] )) && alias cat='bat'
+(( $+commands[nvim] )) && alias vim='nvim'
+(( $+commands[gnome-text-editor] )) && alias gedit='gnome-text-editor'
+
 alias c='clear'
-alias ll='lsd -lh'
-alias la='lsd -lah'
-alias tree='lsd --tree'
-alias S='yay -S'
-alias Ss='yay -Ss'
-alias gedit='gnome-text-editor'
-# alias nano='nvim'
-alias cat='bat'
 alias py='python3'
-alias pn='cat /sys/class/power_supply/BAT0/power_now'
-alias sw='cat /tmp/specialworkspace'
 alias ..='cd ..'
-alias ~='cd ~'
 alias co='curl -O'
-alias update-mirrors='sudo reflector -a 48 -c JP -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist'
-alias Quiet='asusctl profile -P Quiet'
-alias Balanced='asusctl profile -P Balanced'
-alias Performance='asusctl profile -P Performance'
-alias incognito='unset HISTFILE'
-
-alias charge='asusctl battery limit'
-alias keyboard_color='asusctl aura static -c 803dba'
-
-alias home-server='ssh home-server'
-alias aj-server='ssh aj-server'
-alias source-zsh='source ~/.zshrc'
 alias ip='ip -c'
 
-alias mpv-hehe='/mnt/AJ/Projects/mpv-shim-hehe/main'
+alias pn='cat /sys/class/power_supply/BAT0/power_now'
+alias sw='cat /tmp/specialworkspace'
 
-alias animation-off='hyprctl keyword animations:enabled 0'
-alias animation-on='hyprctl keyword animations:enabled 1'
+alias source-zsh='source ~/.zshrc'
+alias incognito='unset HISTFILE'
 
-alias nvrun='switcherooctl launch -g 1'
+# -----------------------------------------------------------------------------
+# Arch / system aliases
+# -----------------------------------------------------------------------------
+if (( $+commands[yay] )); then
+  alias S='yay -S'
+  alias Ss='yay -Ss'
+fi
 
-alias source-funcs='source <(curl -s https://arch-install.pages.dev/other/functions.sh)'
+alias update-mirrors='sudo reflector -a 48 -c JP -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist'
 
-# ctf
-alias kali='ssh aj@172.21.0.2'
-alias factordb='uv --directory /mnt/AJ/Projects/factordb run /mnt/AJ/Projects/factordb/factordb.py'
-alias rsactftool='uv --directory=/home/aj/AJ/Projects/ctf/tools/RsaCtfTool run RsaCtfTool'
-alias pcrt='python2 /mnt/AJ/Projects/ctf/PCRT/PCRT.py'
-alias grepico='grep -o "picoCTF{.*}"'
-alias copy='wl-copy'
-alias grepicopy='grepico|copy'
-alias mkctf='mkdir -p "Binary Exploitation" Cryptography Forensics "General Skills" Others "Reverse Engineering" "Web Exploitation"'
-
-alias android-builder='docker start android-builder && docker exec -it android-builder /bin/zsh'
-
-alias reboot-windows='systemctl reboot --boot-loader-entry=windows.conf'
+if (( $+commands[asusctl] )); then
+  alias Quiet='asusctl profile -P Quiet'
+  alias Balanced='asusctl profile -P Balanced'
+  alias Performance='asusctl profile -P Performance'
+  alias charge='asusctl battery limit'
+  alias keyboard_color='asusctl aura static -c 803dba'
+fi
 
 alias powersave-services='sudo systemctl stop libvirtd docker containerd'
 alias restore-services='sudo systemctl start libvirtd docker containerd'
+alias reboot-windows='systemctl reboot --boot-loader-entry=windows.conf'
 
-# Shell integrations
-eval "$(fzf --zsh)"
-eval "$(zoxide init zsh)"
-# eval "$(starship init zsh)"
-# eval "$(warp-cli generate-completions zsh)"
+# -----------------------------------------------------------------------------
+# Hyprland / GPU helpers
+# -----------------------------------------------------------------------------
+if (( $+commands[hyprctl] )); then
+  alias animation-off='hyprctl keyword animations:enabled 0'
+  alias animation-on='hyprctl keyword animations:enabled 1'
+fi
 
-#if [[ $TERM != "tmux-"* && $TERM_PROGRAM != "vscode" ]]; then
-#source ~/.config/zshrc.d/dots-hyprland.zsh
-#fi
+(( $+commands[switcherooctl] )) && alias nvrun='switcherooctl launch -g 1'
+
+# -----------------------------------------------------------------------------
+# SSH / server shortcuts
+# -----------------------------------------------------------------------------
+alias home-server='ssh home-server'
+alias aj-server='ssh aj-server'
+alias kali='ssh aj@172.21.0.2'
+
+# -----------------------------------------------------------------------------
+# Project / development shortcuts
+# -----------------------------------------------------------------------------
+alias mpv-hehe='/mnt/AJ/Projects/mpv-shim-hehe/main'
+
+alias android-builder='docker start android-builder && docker exec -it android-builder /bin/zsh'
+
+alias source-funcs='source <(curl -fsSL https://arch-install.pages.dev/other/functions.sh)'
+
+# -----------------------------------------------------------------------------
+# CTF aliases
+# -----------------------------------------------------------------------------
+alias factordb='uv --directory /mnt/AJ/Projects/factordb run /mnt/AJ/Projects/factordb/factordb.py'
+alias rsactftool='uv --directory="$HOME/AJ/Projects/ctf/tools/RsaCtfTool" run RsaCtfTool'
+alias pcrt='python2 /mnt/AJ/Projects/ctf/PCRT/PCRT.py'
+
+alias grepico='grep -o "picoCTF{.*}"'
+alias copy='wl-copy'
+alias grepicopy='grepico | copy'
+alias mkctf='mkdir -p "Binary Exploitation" Cryptography Forensics "General Skills" Others "Reverse Engineering" "Web Exploitation"'
+
+# -----------------------------------------------------------------------------
+# Tool completions
+# -----------------------------------------------------------------------------
+[[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
+
+# Replay any compdefs Zinit recorded before compinit.
+zinit cdreplay -q
+
+# -----------------------------------------------------------------------------
+# Plugins that wrap ZLE widgets
 #
+# Keep autosuggestions late and syntax-highlighting last.
+# -----------------------------------------------------------------------------
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-syntax-highlighting
 
-#source ~/.config/zshrc.d/auto-Hypr.sh
+# -----------------------------------------------------------------------------
+# Powerlevel10k configuration
+# -----------------------------------------------------------------------------
+[[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
-#eval $(warp-cli generate-completions zsh)
-
-PATH="/home/aj/.local/bin/:/home/aj/.bin:/home/aj/.config/hypr/scripts:$PATH"
-PATH="${PATH}:/opt/android-sdk/platform-tools"
-PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"
-PATH="/home/aj/.bun/bin:$PATH"
-PATH="/home/aj/.local/share/JetBrains/Toolbox/scripts:$PATH"
-PATH="/home/aj/.local/share/gem/ruby/3.4.0/bin:$PATH"
-PATH="/home/aj/.deno/bin:$PATH"
-PATH="$HOME/.dotnet/tools:$PATH"
-PATH="$HOME/Android/Sdk/build-tools/37.0.0:$PATH"
-
-# bun completions
-[ -s "/home/aj/.bun/_bun" ] && source "/home/aj/.bun/_bun"
-[ -s "/home/aj/.deno/env" ] && source "/home/aj/.deno/env"
-
-# pnpm
-export PNPM_HOME="/home/aj/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
