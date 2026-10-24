@@ -1,6 +1,6 @@
 {
   "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   "[dart]": {
     "editor.formatOnSave": true,
@@ -11,27 +11,27 @@
     "editor.wordBasedSuggestions": "off",
   },
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode",
     "editor.tabSize": 2,
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
     "editor.tabSize": 2,
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   "biome.requireConfiguration": true,
   "catppuccin-icons.hidesExplorerArrows": true,
@@ -234,8 +234,9 @@
   "workbench.sideBar.location": "right",
   "chatgpt.followUpQueueMode": "steer",
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   "claudeCode.hideOnboarding": true,
   "claudeCode.preferredLocation": "panel",
+  "go.toolsManagement.autoUpdate": true,
 }

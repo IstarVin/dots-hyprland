@@ -285,6 +285,8 @@ alias copy='wl-copy'
 alias grepicopy='grepico | copy'
 alias mkctf='mkdir -p "Binary Exploitation" Cryptography Forensics "General Skills" Others "Reverse Engineering" "Web Exploitation"'
 
+alias mpv-server='(cd ~/Projects/mpv-web-extension && vpr start:server)'
+
 # -----------------------------------------------------------------------------
 # Tool completions
 # -----------------------------------------------------------------------------
@@ -306,3 +308,5 @@ zinit light zsh-users/zsh-syntax-highlighting
 # -----------------------------------------------------------------------------
 [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
+# Vite+ bin (https://viteplus.dev)
+[[ -f "$HOME/.config/vite-plus/env" ]] && source "/home/aj/.config/vite-plus/env"
